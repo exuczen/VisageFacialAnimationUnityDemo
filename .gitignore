@@ -1,0 +1,8 @@
+/Library/
+/Temp/
+/obj/Debug/
+*.sln
+*.csproj
+*.userprefs
+*.apk
+.vs/
