@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 
 public static partial class VisageTrackerNative
 {
-#if UNITY_STANDALONE_WIN
-    /** This function initialises the tracker.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+	/** This function initialises the tracker.
  	 * 
  	 * Implemented in VisageTrackerUnityPlugin library.
  	 */

@@ -58,7 +58,7 @@ public class VisageTracker : MonoBehaviour
 #endif
     public string ConfigFileOSX;
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 	private AndroidJavaObject androidCameraActivity;
 #endif
 
@@ -341,7 +341,7 @@ public class VisageTracker : MonoBehaviour
 			Application.Quit ();
 		}
 
-#if (UNITY_IPHONE || UNITY_ANDROID) && UNITY_EDITOR
+#if (UNITY_IPHONE) && UNITY_EDITOR
 		// no tracking on ios while in editor
 		return;
 #endif
@@ -380,14 +380,15 @@ public class VisageTracker : MonoBehaviour
 
         // set correct camera field of view
         GetCameraInfo ();
-#if UNITY_ANDROID
+
+#if UNITY_ANDROID && !UNITY_EDITOR
 		//waiting to get information about frame width and height
         if (ImageWidth == 0 || ImageHeight == 0)
             return;
 #endif
 
-        // update gaze direction
-        float[] gazeDirection = new float[2];
+		// update gaze direction
+		float[] gazeDirection = new float[2];
 		VisageTrackerNative._getGazeDirection (gazeDirection);
 		GazeDirection = new Vector2 (gazeDirection [0] * Mathf.Rad2Deg, gazeDirection [1] * Mathf.Rad2Deg);
 
@@ -402,7 +403,7 @@ public class VisageTracker : MonoBehaviour
   
 	void OnDestroy ()
 	{
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         this.androidCameraActivity.Call("closeCamera");
 #else
         VisageTrackerNative._closeCamera ();
@@ -416,11 +417,11 @@ public class VisageTracker : MonoBehaviour
 	{
 		Debug.Log ("Visage Tracker: Initializing tracker with config: '" + config + "'");
 		
-		#if (UNITY_IPHONE || UNITY_ANDROID) && UNITY_EDITOR
+		#if (UNITY_IPHONE) && UNITY_EDITOR
 		return false;
 		#endif
 		
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		// initialize visage vision
 		VisageTrackerNative._loadVisageVision();
 		Unzip();
@@ -436,17 +437,17 @@ public class VisageTracker : MonoBehaviour
 
 	void GetCameraInfo ()
 	{
-#if (UNITY_IPHONE || UNITY_ANDROID) && UNITY_EDITOR
+#if (UNITY_IPHONE) && UNITY_EDITOR
 		return;
 #endif
 
 		VisageTrackerNative._getCameraInfo(out Focus, out ImageWidth, out ImageHeight);
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (ImageWidth == 0 || ImageHeight == 0)
             return;
 #endif
-        // set camera field of view
-        float aspect = ImageWidth / (float)ImageHeight;
+		// set camera field of view
+		float aspect = ImageWidth / (float)ImageHeight;
 		float yRange = (ImageWidth > ImageHeight) ? 1.0f : 1.0f / aspect;
 		Camera.main.fieldOfView = Mathf.Rad2Deg * 2.0f * Mathf.Atan (yRange / Focus);
 	}
@@ -492,7 +493,7 @@ public class VisageTracker : MonoBehaviour
 
 	void RefreshImage ()
 	{
-#if (UNITY_IPHONE || UNITY_ANDROID) && UNITY_EDITOR
+#if (UNITY_IPHONE) && UNITY_EDITOR
 		return;
 #endif
 
@@ -500,23 +501,23 @@ public class VisageTracker : MonoBehaviour
 		if (Frame == null && isTracking) {
 			TexWidth = Convert.ToInt32 (Math.Pow (2.0, Math.Ceiling (Math.Log (ImageWidth) / Math.Log (2.0))));
 			TexHeight = Convert.ToInt32 (Math.Pow (2.0, Math.Ceiling (Math.Log (ImageHeight) / Math.Log (2.0))));
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 			Frame = new Texture2D (TexWidth, TexHeight, TextureFormat.RGB24, false);
 #else
 			Frame = new Texture2D (TexWidth, TexHeight, TextureFormat.RGBA32, false);
-#endif 
+#endif
 
-#if UNITY_STANDALONE_WIN
-            // "pin" the pixel array in memory, so we can pass direct pointer to it's data to the plugin,
-            // without costly marshaling of array of structures.
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+			// "pin" the pixel array in memory, so we can pass direct pointer to it's data to the plugin,
+			// without costly marshaling of array of structures.
 			texturePixels = ((Texture2D)Frame).GetPixels32(0);
 			texturePixelsHandle = GCHandle.Alloc(texturePixels, GCHandleType.Pinned);
 #endif
 		}
-		if (Frame != null && isTracking) {         
-#if UNITY_STANDALONE_WIN 
-            // send memory address of textures' pixel data to VisageTrackerUnityPlugin
-            VisageTrackerNative._setFrameData(texturePixelsHandle.AddrOfPinnedObject());
+		if (Frame != null && isTracking) {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+			// send memory address of textures' pixel data to VisageTrackerUnityPlugin
+			VisageTrackerNative._setFrameData(texturePixelsHandle.AddrOfPinnedObject());
             ((Texture2D)Frame).SetPixels32(texturePixels, 0);
             ((Texture2D)Frame).Apply();
 
@@ -532,7 +533,7 @@ public class VisageTracker : MonoBehaviour
 	// if width and height are -1, values will be set internally
 	void OpenCamera (int orientation, int currDevice, int width, int height, int mirrored)
 	{
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		if (device == currDevice && AppStarted)
 			return;
 		//camera needs to be opened on main thread
@@ -555,7 +556,7 @@ public class VisageTracker : MonoBehaviour
 		int devOrientation;
 		
 		//Device orientation is obtained in AndroidCameraPlugin so we only need information about whether orientation is changed
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID && !UNITY_EDITOR
 		int oldWidth = ImageWidth;
 		int oldHeight = ImageHeight;
 		VisageTrackerNative._getCameraInfo(out Focus, out ImageWidth, out ImageHeight);
@@ -608,7 +609,7 @@ public class VisageTracker : MonoBehaviour
 			"bdtsdata/LBF/ye/lp11.bdf",
 			"bdtsdata/LBF/ye/W",
 			"bdtsdata/LBF/ye/landmarks.txt"
-			, "license-file-name.vlc"
+			, "900-638-182-995-087-495-807-784-735-158-947.vlc"
 		};
 		string outputDir;
 		string localDataFolder = "Visage Tracker";

@@ -34,7 +34,7 @@ public class VideoPreview : MonoBehaviour
 
 				GL.PushMatrix ();
 				GL.LoadPixelMatrix ();
-				#if UNITY_ANDROID
+				#if UNITY_ANDROID && !UNITY_EDITOR
 				Graphics.DrawTexture (rect, Tracker.Frame, new Rect (0f, (float)Tracker.ImageHeight / Tracker.TexHeight, (float)Tracker.ImageWidth / Tracker.TexWidth, -(float)Tracker.ImageHeight / Tracker.TexHeight), 0, 0, 0, 0);
 				#else
 				Graphics.DrawTexture (rect, Tracker.Frame, new Rect (0f, (float)Tracker.ImageHeight / Tracker.TexHeight, (float)Tracker.ImageWidth / Tracker.TexWidth, -(float)Tracker.ImageHeight / Tracker.TexHeight), 0, 0, 0, 0, BGRMaterial);

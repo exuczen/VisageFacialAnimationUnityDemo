@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 public static partial class VisageTrackerNative
 {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 
 	[DllImport ("VisageVision")]
 	public static extern void _loadVisageVision();
