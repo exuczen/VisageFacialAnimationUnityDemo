@@ -1,0 +1,23 @@
+ActionUnitBinding :skin : lower lip drop : 14
+ActionUnitBinding :teeth : teeth : 0
+ActionUnitBinding :tongue : lower lip drop : 0
+ActionUnitBinding :skin : AU_left lip stretch : 4
+ActionUnitBinding :skin : AU_right lip stretch : 5
+ActionUnitBinding :skin : left inner brow raise : 10
+ActionUnitBinding :eyebrows : left inner brow raiser : 0
+ActionUnitBinding :skin : left outer brow : 8
+ActionUnitBinding :eyebrows : left outer brow raiser : 2
+ActionUnitBinding :skin : right inner brow raise : 11
+ActionUnitBinding :eyebrows : right inner brow raiser : 1
+ActionUnitBinding :skin : right outer brow : 9
+ActionUnitBinding :eyebrows : right outer brow raiser : 3
+ActionUnitBinding :skin : nose wrinkle : 7
+ActionUnitBinding :skin : AU_reyeblink : 1
+ActionUnitBinding :skin : AU_leyeblink : 2
+ActionUnitBinding :skin : AU_lip sad : 6
+ActionUnitBinding :skin : left brow low : 12
+ActionUnitBinding :eyebrows : left brow low : 4
+ActionUnitBinding :skin : right brow low : 13
+ActionUnitBinding :eyebrows : right brow low : 5
+ActionUnitBinding :skin : leye raise : 15
+ActionUnitBinding :skin : reye raise : 16

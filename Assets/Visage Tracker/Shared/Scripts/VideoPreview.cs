@@ -22,10 +22,10 @@ public class VideoPreview : MonoBehaviour
 	}
 
 	void OnRenderObject ()
-	{   
-		float scale = DesiredScreenWidth * Screen.width / Tracker.ImageWidth;
+	{
+		// Height / Tracker.ImageHeight = Width / Tracker.ImageWidth;
 		Width = DesiredScreenWidth * Screen.width;
-		Height = Tracker.ImageHeight * scale;
+		Height = Tracker.ImageHeight * Width / Tracker.ImageWidth;
 
 		if (Tracker.TrackerStatus != TrackStatus.Off) {
             

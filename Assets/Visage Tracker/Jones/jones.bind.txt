@@ -57,27 +57,27 @@
 #
 #
 # 
-# au_name;						blendshape_identifier;		min_limit;	max_limit;	inverted;	     weight;		filter_window;		filter_amount
-au_lower_lip_drop;				skin:14;			   		0.23;		    1;		    	0;			1.0;		4;					0.3;
-au_lower_lip_drop;				teeth:0;					0.3;	    	1;		    	0;			1.0;		4;					0.3;
-au_lower_lip_drop;				tongue:0;					0.5;		    1;		    	0;			1.0;		4;					0.3;
-au_lip_stretcher_left;			skin:4;				    	0;              1.2;	            0;			1.0;		4;					0.3;
-au_lip_stretcher_right;			skin:5;				    	0;              1.2;	            0;			1.0;		4;					0.3;
-au_left_inner_brow_raiser;		skin:10;					0;		     	1;	         	0;			1.0;		4;					0.3;
-au_left_inner_brow_raiser;		eyebrows:0;					0;			    1;	        	0;			1.0;		4;					0.3;
-au_left_outer_brow_raiser;		skin:8;		    	    	0;		    	1;	        	0;			1.0;		4;					0.3;
-au_left_outer_brow_raiser;		eyebrows:2;					0;		    	1;	    	    0;			1.0;		4;					0.3;
-au_right_inner_brow_raiser;		skin:11;					0;		    	1;	    	    0;			1.0;		4;					0.3;
-au_right_inner_brow_raiser;		eyebrows:1;					0;		    	1;	    	    0;			1.0;		4;					0.3;
-au_right_outer_brow_raiser;		skin:9;						0;		       	1;		        0;			1.0;		4;					0.3;
-au_right_outer_brow_raiser;		eyebrows:3;					0;		    	1;	         	0;			1.0;		4;					0.3;
-au_nose_wrinkler;				skin:7;						0;		        0.3;	        0;			1.0;		4;					0.3;
-au_leye_closed;                 skin:1;                    0.4;             0.7;            0;          1.0;        4;                  1;
-au_reye_closed;                 skin:2;                    0.4;             0.7;            0;          1.0;        4;                  1;
-au_lip_stretcher_left;			skin:6;				      -0.2;	         	0;	        1;			1.0;		4;					1; 
-au_left_inner_brow_raiser;		skin:12;					-0.8;	    	0;	        	1;			1.0;		4;					0.3;
-au_left_inner_brow_raiser;		eyebrows:4;					-0.8;	    	0;	    	    1;			1.0;		4;					0.3;
-au_right_inner_brow_raiser;		skin:13;					-0.8;	    	0;	    	    1;			1.0;		4;					0.3;
-au_right_inner_brow_raiser;		eyebrows:5;					-0.8;		    0;	    	    1;			1.0;		4;					0.3;
-au_leye_closed;                 skin:15;                    -0.5;           0;              1;          1.0;        4;                  1;
-au_reye_closed;                 skin:16;                    -0.5;           0;              1;          1.0;        4;                  1;
+# au_name;						blendshape_identifier;					min_limit;	max_limit;	inverted;	     weight;		filter_window;		filter_amount
+au_lower_lip_drop;				skin:lower lip drop;			   		0.23;		    1;		    	0;			1.0;		4;					0.3;
+au_lower_lip_drop;				teeth:teeth;							0.3;	    	1;		    	0;			1.0;		4;					0.3;
+au_lower_lip_drop;				tongue:lower lip drop;					0.5;		    1;		    	0;			1.0;		4;					0.3;
+au_lip_stretcher_left;			skin:AU_left lip stretch;				0;              1.2;	            0;			1.0;		4;					0.3;
+au_lip_stretcher_right;			skin:AU_right lip stretch;				0;              1.2;	            0;			1.0;		4;					0.3;
+au_left_inner_brow_raiser;		skin:left inner brow raise;				0;		     	1;	         	0;			1.0;		4;					0.3;
+au_left_inner_brow_raiser;		eyebrows:left inner brow raiser;		0;			    1;	        	0;			1.0;		4;					0.3;
+au_left_outer_brow_raiser;		skin:left outer brow;		    	    0;		    	1;	        	0;			1.0;		4;					0.3;
+au_left_outer_brow_raiser;		eyebrows:left outer brow raiser;		0;		    	1;	    	    0;			1.0;		4;					0.3;
+au_right_inner_brow_raiser;		skin:right inner brow raise;			0;		    	1;	    	    0;			1.0;		4;					0.3;
+au_right_inner_brow_raiser;		eyebrows:right inner brow raiser;		0;		    	1;	    	    0;			1.0;		4;					0.3;
+au_right_outer_brow_raiser;		skin:right outer brow;					0;		       	1;		        0;			1.0;		4;					0.3;
+au_right_outer_brow_raiser;		eyebrows:right outer brow raiser;		0;		    	1;	         	0;			1.0;		4;					0.3;
+au_nose_wrinkler;				skin:nose wrinkle;						0;		        0.3;	        0;			1.0;		4;					0.3;
+au_leye_closed;                 skin:AU_reyeblink;						0.4;             0.7;            0;          1.0;        4;                  1;
+au_reye_closed;                 skin:AU_leyeblink;						0.4;             0.7;            0;          1.0;        4;                  1;
+au_lip_stretcher_left;			skin:AU_lip sad;						-0.2;	         	0;	        1;			1.0;		4;					1; 
+au_left_inner_brow_raiser;		skin:left brow low;						-0.8;	    	0;	        	1;			1.0;		4;					0.3;
+au_left_inner_brow_raiser;		eyebrows:left brow low;					-0.8;	    	0;	    	    1;			1.0;		4;					0.3;
+au_right_inner_brow_raiser;		skin:right brow low;					-0.8;	    	0;	    	    1;			1.0;		4;					0.3;
+au_right_inner_brow_raiser;		eyebrows:right brow low;				-0.8;		    0;	    	    1;			1.0;		4;					0.3;
+au_leye_closed;                 skin:leye raise;						-0.5;           0;              1;          1.0;        4;                  1;
+au_reye_closed;                 skin:reye raise;						-0.5;           0;              1;          1.0;        4;                  1;

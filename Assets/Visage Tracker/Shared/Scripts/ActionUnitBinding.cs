@@ -105,6 +105,7 @@ public class ActionUnitBinding : MonoBehaviour
     {
         string text = configuration.text;
         string[] lines = text.Split(new [] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+		string debugLogText = "";
         foreach (string line in lines)
         {
             // skip comments
@@ -132,14 +133,15 @@ public class ActionUnitBinding : MonoBehaviour
             }
 
             string blendshapeObjectName = blendShapeParts[0];
-            int blendshapeIndex = 0;
-            if (!int.TryParse(blendShapeParts[1], out blendshapeIndex))
-            {
-                Debug.LogError("Invalid blendshape_indentifier value in configuration '" + configuration.name + "'.", tracker);
-                return;
-            }
+			string blendshapeName = blendShapeParts[1];
+			//int blendshapeIndex = 0;
+			//if (!int.TryParse(blendShapeParts[1], out blendshapeIndex))
+			//{
+			//	Debug.LogError("Invalid blendshape_indentifier value in configuration '" + configuration.name + "'.", tracker);
+			//	return;
+			//}
 
-            GameObject target = GameObject.Find(blendshapeObjectName);
+			GameObject target = GameObject.Find(blendshapeObjectName);
             if (target == null || target.GetComponent<SkinnedMeshRenderer>() == null)
             {
 				Debug.LogError(target==null);
@@ -213,9 +215,22 @@ public class ActionUnitBinding : MonoBehaviour
             binding.FilterConstant = filterAmount;
             binding.Targets = new ActionUnitBindingTarget[1];
             binding.Targets[0] = new ActionUnitBindingTarget();
-            binding.Targets[0].Renderer = GameObject.Find(blendshapeObjectName).GetComponent<SkinnedMeshRenderer>();
-            binding.Targets[0].BlendshapeIndex = blendshapeIndex;
+			SkinnedMeshRenderer renderer = GameObject.Find(blendshapeObjectName).GetComponent<SkinnedMeshRenderer>();
+			int blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
+			if (blendshapeIndex < 0) {
+				blendshapeName = String.Concat(blendshapeName, " ");
+				blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
+			}
+			//string blendshapeName = renderer.sharedMesh.GetBlendShapeName(blendshapeIndex);
+			//Debug.Log("ActionUnitBinding :" + blendshapeObjectName + " : " + blendshapeName + " : " + blendshapeIndex);
+			debugLogText += "ActionUnitBinding :" + blendshapeObjectName + " : " + blendshapeName + " : " + blendshapeIndex + "\n";
+			binding.Targets[0].Renderer = renderer;
+			binding.Targets[0].BlendshapeIndex = blendshapeIndex;
             binding.Targets[0].Weight = 1f;
         }
-    }
+		Debug.Log(debugLogText);
+		//SkinnedMeshRenderer eyelashesRenderer = GameObject.Find("Eyelashes").GetComponent<SkinnedMeshRenderer>();
+		//string blendshapeName2 = eyelashesRenderer.sharedMesh.GetBlendShapeName(16);
+		//Debug.Log("*"+ blendshapeName2+"*");
+	}
 }
