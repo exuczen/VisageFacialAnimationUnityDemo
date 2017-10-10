@@ -75,7 +75,7 @@ public class VisageTracker : MonoBehaviour
 
     /** Binding configurations imported as text assets.
      */
-    public TextAsset[] BindingConfigurations;
+    //public TextAsset[] BindingConfigurations;
 
 	/** Tracker status.
     */
@@ -183,11 +183,21 @@ public class VisageTracker : MonoBehaviour
 
     #endregion
 
-    /** This method is called before any of the Update methods are called the first time.
+	private static VisageTracker instance;
+
+	public  static VisageTracker Instance {
+		get {
+			if (instance == null)
+				instance = FindObjectOfType<VisageTracker>();
+			return instance;
+		}
+	}
+
+	/** This method is called before any of the Update methods are called the first time.
 	 * 
 	 * It initializes helper variables and the tracker.
 	 */
-    void Start ()
+	private void Awake()
 	{	
 		contentSwitchCam.image = (Texture2D)imageSwitchCam;
 		contentStartTracking.image = (Texture2D)imageStartTracking;
@@ -245,14 +255,14 @@ public class VisageTracker : MonoBehaviour
 		InitializeTracker (configFilePath, licenseFilePath);
 
 		// clear all existing binding components
-		ActionUnitBinding[] existingBindings = GetComponents<ActionUnitBinding> ();
-		foreach (ActionUnitBinding binding in existingBindings)
-			Destroy (binding);
+		//ActionUnitBinding[] existingBindings = GetComponents<ActionUnitBinding> ();
+		//foreach (ActionUnitBinding binding in existingBindings)
+		//	Destroy (binding);
 
 		// setup new bindings
-		foreach (TextAsset configuration in BindingConfigurations)
-			ActionUnitBinding.SetupBinding (this, configuration);
-		
+		//foreach (TextAsset configuration in BindingConfigurations)
+		//	ActionUnitBinding.SetupBinding(this, configuration);
+
 		//check orientation and start camera
 		Orientation = getDeviceOrientation ();
 		OpenCamera (Orientation, device, defaultCameraWidth, defaultCameraHeight, isMirrored);

@@ -2,7 +2,8 @@
 using System.Collections;
 using System;
 
-public class ActionUnitBinding : MonoBehaviour
+[Serializable]
+public class ActionUnitBinding
 {
     public bool Initialized
     {
@@ -31,12 +32,12 @@ public class ActionUnitBinding : MonoBehaviour
 
     private ActionUnitData data;
 
-    void Start()
+    public ActionUnitBinding()
     {
         normalizedValueHistory = new float[FilterWindowSize];
     }
 
-    void Update()
+	public void UpdateAction()
     {
         if (Tracker == null)
             return;
@@ -101,136 +102,5 @@ public class ActionUnitBinding : MonoBehaviour
         return filteredValue;
     }
 
-    public static void SetupBinding(VisageTracker tracker, TextAsset configuration)
-    {
-        string text = configuration.text;
-        string[] lines = text.Split(new [] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-		string debugLogText = "";
-        foreach (string line in lines)
-        {
-            // skip comments
-            if (line.StartsWith("#"))
-                continue;
 
-            string[] values = line.Split(new [] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-            string[] trimmedValues = new string[8];
-            for (int i = 0; i < Mathf.Min(values.Length, 8); i++)
-            {
-                // trim values
-                trimmedValues[i] = values[i].Trim();
-            }
-
-            // parse au name
-            string au = trimmedValues[0];
-
-            // parse blendshape identifier
-            string blendshape = trimmedValues[1];
-            string[] blendShapeParts = blendshape.Split(':');
-            if (blendShapeParts.Length < 2)
-            {
-                Debug.LogError("Invalid blendshape_indentifier value in configuration '" + configuration.name + "'.", tracker);
-                return;
-            }
-
-            string blendshapeObjectName = blendShapeParts[0];
-			string blendshapeName = blendShapeParts[1];
-			//int blendshapeIndex = 0;
-			//if (!int.TryParse(blendShapeParts[1], out blendshapeIndex))
-			//{
-			//	Debug.LogError("Invalid blendshape_indentifier value in configuration '" + configuration.name + "'.", tracker);
-			//	return;
-			//}
-
-			GameObject target = GameObject.Find(blendshapeObjectName);
-            if (target == null || target.GetComponent<SkinnedMeshRenderer>() == null)
-            {
-				Debug.LogError(target==null);
-                Debug.LogError("No valid blendshape target named '" + blendshapeObjectName + "' defined in configuration: '" + configuration.name + "'.", tracker);
-                return;
-            }
-            
-            // parse min limit
-            float min = -1f;
-            if (!float.TryParse(trimmedValues[2], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out min))
-            {
-                Debug.LogError("Invalid min_limit value in binding configuration '" + configuration.name + "'.", tracker);
-                return;
-            }
-
-            // parse max limit
-            float max = 1f;
-            if (!float.TryParse(trimmedValues[3], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out max))
-            {
-                Debug.LogError("Invalid max_limit value in binding configuration '" + configuration.name + "'.", tracker);
-                return;
-            }
-
-            // parse inverted
-            bool inverted = false;
-            if (!string.IsNullOrEmpty(trimmedValues[4]))
-                inverted = trimmedValues[4] == "1";
-
-            // parse weight
-            float weight = 1f;
-            if (!string.IsNullOrEmpty(trimmedValues[5]))
-            {
-                if (!float.TryParse(trimmedValues[5], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out weight))
-                {
-                    Debug.LogError("Invalid weight value in binding configuration '" + configuration.name + "'.", tracker);
-                    return;
-                }
-            }
-            
-            // parse filter window
-            int filterWindow = 6;
-            if (!string.IsNullOrEmpty(trimmedValues[6]))
-            {
-                if (!int.TryParse(trimmedValues[6], out filterWindow) || filterWindow < 0 || filterWindow > 16)
-                {
-                    Debug.LogError("Invalid filter_window value in binding configuration '" + configuration.name + "'.", tracker);
-                    return;
-                }
-            }
-
-            // parse filter amount
-            float filterAmount = 0.3f;
-            if (!string.IsNullOrEmpty(trimmedValues[7]))
-            {
-                if (!float.TryParse(trimmedValues[7], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out filterAmount))
-                {
-                    Debug.LogError("Invalid filter_amount value in binding configuration '" + configuration.name + "'.", tracker);
-                    return;
-                }
-            }
-
-            // add new binding
-            ActionUnitBinding binding = tracker.gameObject.AddComponent<ActionUnitBinding>();
-            binding.Name = au + " -> " + blendshape;
-            binding.Tracker = tracker;
-            binding.ActionUnitName = au;
-            binding.Limits = new Vector2(min, max);
-            binding.Inverted = inverted;
-            binding.Weight = weight;
-            binding.FilterWindowSize = filterWindow;
-            binding.FilterConstant = filterAmount;
-            binding.Targets = new ActionUnitBindingTarget[1];
-            binding.Targets[0] = new ActionUnitBindingTarget();
-			SkinnedMeshRenderer renderer = GameObject.Find(blendshapeObjectName).GetComponent<SkinnedMeshRenderer>();
-			int blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
-			if (blendshapeIndex < 0) {
-				blendshapeName = String.Concat(blendshapeName, " ");
-				blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
-			}
-			//string blendshapeName = renderer.sharedMesh.GetBlendShapeName(blendshapeIndex);
-			//Debug.Log("ActionUnitBinding :" + blendshapeObjectName + " : " + blendshapeName + " : " + blendshapeIndex);
-			debugLogText += "ActionUnitBinding :" + blendshapeObjectName + " : " + blendshapeName + " : " + blendshapeIndex + "\n";
-			binding.Targets[0].Renderer = renderer;
-			binding.Targets[0].BlendshapeIndex = blendshapeIndex;
-            binding.Targets[0].Weight = 1f;
-        }
-		Debug.Log(debugLogText);
-		//SkinnedMeshRenderer eyelashesRenderer = GameObject.Find("Eyelashes").GetComponent<SkinnedMeshRenderer>();
-		//string blendshapeName2 = eyelashesRenderer.sharedMesh.GetBlendShapeName(16);
-		//Debug.Log("*"+ blendshapeName2+"*");
-	}
 }

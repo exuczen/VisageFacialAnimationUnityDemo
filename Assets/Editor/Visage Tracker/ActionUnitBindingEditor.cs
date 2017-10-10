@@ -9,7 +9,7 @@ public class ActionUnitBindingEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        binding = (ActionUnitBinding)target;
+        //binding = (ActionUnitBinding)target;
 
         // name and action unit
         EditorGUILayout.Separator();
