@@ -58,12 +58,12 @@
 #
 # 
 # au_name;						blendshape_identifier;					min_limit;	max_limit;	inverted;	     weight;		filter_window;		filter_amount
-au_lower_lip_drop;				Head:sayLarge;					   		0.5;		    1.0;		    	0;			1.0;		1;					0.3;
+au_lower_lip_drop;				Head:sayLarge;					   		0.5;		    1.1;		    	0;			1.0;		2;					0.3;
 au_lower_lip_drop;				Head:sayMiddle;					   		0.5;		    0.9;		    	0;			1.0;		1;					0.3;
 au_lower_lip_drop;				Head:saySmall;					   		0.5;		    0.8;		    	0;			1.0;		1;					0.3;
 au_lower_lip_drop;				Head:A_Mouth_Curl;				   		0.3;		    0.6;		    	0;			1.0;		1;					0.3;
-au_lip_stretcher_left;			Head:A_Mouth_Smile;						0.5;              1.0;	            0;			1.0;		2;					0.3;
-au_lip_stretcher_right;			Head:A_Mouth_Smile;						0.5;              1.0;	            0;			1.0;		2;					0.3;
+au_lip_stretcher_left;			Head:A_Mouth_Smile;						0.4;              0.8;	            0;			1.0;		2;					0.3;
+au_lip_stretcher_right;			Head:A_Mouth_Smile;						0.4;              0.8;	            0;			1.0;		2;					0.3;
 au_lip_stretcher_left;			Head:A_Mouth_Curl;						0.0;              1.3;	            0;			1.0;		2;					0.3;
 au_lip_stretcher_right;			Head:A_Mouth_Curl;						0.0;              1.3;	            0;			1.0;		2;					0.3;
 # au_lip_corner_depressor;		Head:A_Mouth_Closed_Cry;				0.5;              1.0;	            0;			1.0;		2;					0.3;

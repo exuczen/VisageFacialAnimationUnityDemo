@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 325e0e430d5d445ab95eab7415cf4a2f, type: 3}
+  m_Name: FemaleSetup
+  m_EditorClassIdentifier: 
+  gender: 2
+  animations:
+  - label: Idle 0
+    trigger: 1
+    isSelectable: 1
+  - label: Idle 1
+    trigger: 2
+    isSelectable: 1
+  - label: Idle 2
+    trigger: 3
+    isSelectable: 1
+  - label: Idle 3
+    trigger: 4
+    isSelectable: 1
+  - label: Wave 0
+    trigger: 6
+    isSelectable: 1
+  - label: Wave 1
+    trigger: 7
+    isSelectable: 1
+  - label: Blushing
+    trigger: 11
+    isSelectable: 1
+  - label: Confused
+    trigger: 12
+    isSelectable: 1
+  - label: Disappointed
+    trigger: 13
+    isSelectable: 1
+  - label: Sending Kiss
+    trigger: 17
+    isSelectable: 1
+  - label: Thumbs Up
+    trigger: 18
+    isSelectable: 1
+  - label: Scared
+    trigger: 16
+    isSelectable: 1
+  - label: Frustrated
+    trigger: 19
+    isSelectable: 1
+  idleDecorators: 0600000007000000
+  idleRandomStates: 01000000020000000300000004000000
