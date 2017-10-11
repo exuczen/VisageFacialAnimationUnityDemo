@@ -101,12 +101,12 @@ public class VisageTracker : MonoBehaviour
     */
 	public float Focus;
 
-	/** Camera frame width.
-     */
+	/** Camera frame width.*/
+	[HideInInspector]
 	public int ImageWidth;
 
-	/** Camera frame heigth.
-     */
+	/** Camera frame heigth.*/
+	[HideInInspector]
 	public int ImageHeight;
 
 	/** Width of the texture for displaying camera frame
@@ -317,7 +317,7 @@ public class VisageTracker : MonoBehaviour
 				normalButton = GUI.Button (new Rect (Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 30, Screen.height / 3, Screen.width / 12), "Normal");
 			if (normalButton) {
 				VideoPreview preview = GameObject.Find ("VideoPreview").GetComponent<VideoPreview> ();
-				preview.DesiredScreenWidth = 0.3f;
+				preview.DesiredScreenWidth = 1f;
 				preview.PreviewResults = true;
 				mask = false; 
 			}
@@ -622,7 +622,7 @@ public class VisageTracker : MonoBehaviour
 			, "900-638-182-995-087-495-807-784-735-158-947.vlc"
 		};
 		string outputDir;
-		string localDataFolder = "VisageTracker";
+		string localDataFolder = "Visage Tracker";
 		
 		StreamWriter sw;
 		

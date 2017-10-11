@@ -8,11 +8,9 @@ public class VideoPreview : MonoBehaviour
 	public Vector2 Offset;
 	public float DesiredScreenWidth;
 	[HideInInspector]
-	public float
-		Width;
+	public float Width;
 	[HideInInspector]
-	public float
-		Height;
+	public float Height;
 	public Material BGRMaterial;
 	public Material LineMaterial;
 	
@@ -26,11 +24,12 @@ public class VideoPreview : MonoBehaviour
 		// Height / Tracker.ImageHeight = Width / Tracker.ImageWidth;
 		Width = DesiredScreenWidth * Screen.width;
 		Height = Tracker.ImageHeight * Width / Tracker.ImageWidth;
-
+		Offset.y = (Screen.height - Height) / 2;
 		if (Tracker.TrackerStatus != TrackStatus.Off) {
             
 			if (Tracker.Frame != null && Camera.current != Camera.main) {
-				Rect rect = new Rect (Offset.x, Screen.height - Offset.y, Width, -Height);
+				//Rect rect = new Rect (Offset.x, Screen.height - Offset.y, Width, -Height);
+				Rect rect = new Rect(Offset.x, (Screen.height + Height) / 2, Width, -Height);
 
 				GL.PushMatrix ();
 				GL.LoadPixelMatrix ();
