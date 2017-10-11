@@ -622,7 +622,7 @@ public class VisageTracker : MonoBehaviour
 			, "900-638-182-995-087-495-807-784-735-158-947.vlc"
 		};
 		string outputDir;
-		string localDataFolder = "Visage Tracker";
+		string localDataFolder = "VisageTracker";
 		
 		StreamWriter sw;
 		
