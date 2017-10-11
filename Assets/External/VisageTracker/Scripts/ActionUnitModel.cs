@@ -85,13 +85,13 @@ public class ActionUnitModel : MonoBehaviour
 			//	return;
 			//}
 
-			GameObject target = GameObject.Find(blendshapeObjectName);
-			if (target == null || target.GetComponent<SkinnedMeshRenderer>() == null)
-			{
-				Debug.LogError(target == null);
-				Debug.LogError("No valid blendshape target named '" + blendshapeObjectName + "' defined in configuration: '" + configuration.name + "'.", tracker);
-				return;
-			}
+			//GameObject target = GameObject.Find(blendshapeObjectName);
+			//if (target == null || target.GetComponent<SkinnedMeshRenderer>() == null)
+			//{
+			//	Debug.LogError(target == null);
+			//	Debug.LogError("No valid blendshape target named '" + blendshapeObjectName + "' defined in configuration: '" + configuration.name + "'.", tracker);
+			//	return;
+			//}
 
 			// parse min limit
 			float min = -1f;
