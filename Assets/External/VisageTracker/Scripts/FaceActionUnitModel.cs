@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionUnitModel : MonoBehaviour
+public class FaceActionUnitModel : MonoBehaviour
 {
 	[SerializeField]
 	private TextAsset configuration;
@@ -191,6 +191,5 @@ public class ActionUnitModel : MonoBehaviour
 		//string blendshapeName2 = eyelashesRenderer.sharedMesh.GetBlendShapeName(16);
 		//Debug.Log("*"+ blendshapeName2+"*");
 	}
-
 
 }
