@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-public static partial class VisageTrackerNative
+namespace Visage.FaceTracking
 {
+	public static partial class VisageTrackerNative
+	{
 #if UNITY_ANDROID && !UNITY_EDITOR
 
 	[DllImport ("VisageVision")]
@@ -112,4 +114,5 @@ public static partial class VisageTrackerNative
 
 #endif
 
+	} 
 }

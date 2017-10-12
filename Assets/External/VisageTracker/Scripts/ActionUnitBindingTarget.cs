@@ -2,13 +2,16 @@
 using System.Collections;
 using System;
 
-[Serializable]
-public class ActionUnitBindingTarget 
+namespace Visage.FaceTracking
 {
-    [HideInInspector]
-    public string Name;
+	[Serializable]
+	public class ActionUnitBindingTarget
+	{
+		[HideInInspector]
+		public string Name;
 
-    public SkinnedMeshRenderer Renderer;
-    public int BlendshapeIndex;
-    public float Weight = 1f;
+		public SkinnedMeshRenderer Renderer;
+		public int BlendshapeIndex;
+		public float Weight = 1f;
+	} 
 }

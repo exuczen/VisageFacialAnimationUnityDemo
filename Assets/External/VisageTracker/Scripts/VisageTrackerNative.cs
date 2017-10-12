@@ -3,7 +3,10 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System;
 
-public static partial class VisageTrackerNative
+namespace Visage.FaceTracking
 {
-    // shared
+	public static partial class VisageTrackerNative
+	{
+		// shared
+	} 
 }

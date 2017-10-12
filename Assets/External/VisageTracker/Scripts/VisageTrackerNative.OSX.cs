@@ -3,9 +3,11 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System;
 
-public static partial class VisageTrackerNative
+namespace Visage.FaceTracking
 {
-	#if (UNITY_EDITOR_OSX && !UNITY_IOS) || UNITY_STANDALONE_OSX
+	public static partial class VisageTrackerNative
+	{
+#if (UNITY_EDITOR_OSX && !UNITY_IOS) || UNITY_STANDALONE_OSX
 
 	/** This function initialises the tracker.
  	* 
@@ -120,5 +122,6 @@ public static partial class VisageTrackerNative
 
 #endif
 
+	} 
 }
 
