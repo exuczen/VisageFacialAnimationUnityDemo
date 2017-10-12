@@ -114,14 +114,12 @@ namespace Visage.FaceTracking
 		/** Width of the texture for displaying camera frame
 		 */
 		[HideInInspector]
-		public int
-			TexWidth;
+		public int TexWidth;
 
 		/** Height of the texture for displaying camera frame
 		 */
 		[HideInInspector]
-		public int
-			TexHeight;
+		public int TexHeight;
 
 		/** Texture for video display and 3D face model.
 		*/
@@ -175,6 +173,7 @@ namespace Visage.FaceTracking
 		private int currentDevice = 0;
 		public int defaultCameraWidth = -1;
 		public int defaultCameraHeight = -1;
+		public bool setCameraFieldOfView;
 
 		[Header("GUI")]
 		[SerializeField]
@@ -468,18 +467,20 @@ namespace Visage.FaceTracking
 		void GetCameraInfo()
 		{
 #if (UNITY_IPHONE) && UNITY_EDITOR
-		return;
+			return;
 #endif
-
 			VisageTrackerNative._getCameraInfo(out Focus, out ImageWidth, out ImageHeight);
 #if UNITY_ANDROID && !UNITY_EDITOR
-        if (ImageWidth == 0 || ImageHeight == 0)
-            return;
+			if (ImageWidth == 0 || ImageHeight == 0)
+				return;
 #endif
-			// set camera field of view
-			float aspect = ImageWidth / (float)ImageHeight;
-			float yRange = (ImageWidth > ImageHeight) ? 1.0f : 1.0f / aspect;
-			Camera.main.fieldOfView = Mathf.Rad2Deg * 2.0f * Mathf.Atan(yRange / Focus);
+			if (setCameraFieldOfView)
+			{
+				// set camera field of view
+				float aspect = ImageWidth / (float)ImageHeight;
+				float yRange = (ImageWidth > ImageHeight) ? 1.0f : 1.0f / aspect;
+				Camera.main.fieldOfView = Mathf.Rad2Deg * 2.0f * Mathf.Atan(yRange / Focus);
+			}
 		}
 
 		/** Returns the action unit with the specified name.
