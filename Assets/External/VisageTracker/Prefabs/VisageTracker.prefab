@@ -80,3 +80,4 @@ MonoBehaviour:
   device: 0
   defaultCameraWidth: -1
   defaultCameraHeight: -1
+  showGUI: 1

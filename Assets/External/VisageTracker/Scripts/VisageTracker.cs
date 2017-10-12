@@ -176,6 +176,10 @@ namespace Visage.FaceTracking
 		public int defaultCameraWidth = -1;
 		public int defaultCameraHeight = -1;
 
+		[Header("GUI")]
+		[SerializeField]
+		private bool showGUI;
+
 		private GUIStyle startTrackingStyle = null;
 		private GUIStyle stopTrackingStyle = null;
 		private GUIStyle customButtonStyle = null;
@@ -277,6 +281,9 @@ namespace Visage.FaceTracking
 
 		void OnGUI()
 		{
+			if (!showGUI)
+				return;
+
 			if (!isTracking)
 			{
 				if (ImageWidth < ImageHeight)
