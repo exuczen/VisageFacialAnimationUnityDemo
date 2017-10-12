@@ -276,7 +276,7 @@ namespace Visage.FaceTracking
 			isTracking = true;
 
 			if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore)
-				Debug.Log("Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
+				Debug.Log("VisageTracker.Awake: Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
 		}
 
 		void OnGUI()
@@ -670,11 +670,11 @@ namespace Visage.FaceTracking
 
 				if (!string.IsNullOrEmpty(unpacker.error))
 				{
-					Debug.Log(unpacker.error);
+					Debug.LogWarning("VisageTracker.Unzip: " + unpacker.error);
 					continue;
 				}
 
-				Debug.Log(filename);
+				//Debug.Log("VisageTracker.Unzip: filename=" + filename);
 
 				if (filename.Contains("/"))
 				{
@@ -706,8 +706,7 @@ namespace Visage.FaceTracking
 				{
 					File.WriteAllBytes("/" + outputDir + "/" + filename, unpacker.bytes);
 				}
-
-				Debug.Log("File written " + filename + "\n");
+				//Debug.Log("VisageTracker.Unzip: File written " + filename + "\n");
 			}
 		}
 	} 
