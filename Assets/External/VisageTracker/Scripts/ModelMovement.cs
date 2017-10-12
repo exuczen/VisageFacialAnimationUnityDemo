@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Movement : MonoBehaviour
+public class ModelMovement : MonoBehaviour
 {
 
 	public VisageTracker Tracker;
@@ -27,51 +27,52 @@ public class Movement : MonoBehaviour
 	public float eyebrowTreshold = 0.2f;
 	public float falseRotationValue = 12f;
 	private float rotationFixScale = 0f;
-	
+
 	// Use this for initialization
-	void Start ()
+	void Start()
 	{
 		if (Tracker == null)
-			Debug.LogError ("Assign a tracker", this);
-		
+			Debug.LogError("Assign a tracker", this);
+
 		if (HeadBone == null)
-			Debug.LogError ("Assign a head bone transform", this);
-		
+			Debug.LogError("Assign a head bone transform", this);
+
 		if (RootBone == null)
-			Debug.LogError ("Assign the root bone transform", this);
-		
+			Debug.LogError("Assign the root bone transform", this);
+
 		// initialize histories
 		translationHistory = new Vector3[TranslationFilterWindowSize];
 		rotationHistory = new Vector3[RotationFilterWindowSize];
-		
+
 		// get head to root
 		Vector3 headRoot = HeadBone.position + HeadBone.right * HeadRootOffset.x + HeadBone.up * HeadRootOffset.y + HeadBone.forward * HeadRootOffset.z;
 		HeadToRoot = RootBone.position - headRoot;
 
 	}
-	
+
 	// Update is called once per frame
-	void Update ()
-	{  
-		if (Tracker.TrackerStatus != TrackStatus.Ok) {
+	void Update()
+	{
+		if (Tracker.TrackerStatus != TrackStatus.Ok)
+		{
 			return;
 		}
 
-		FixFalseMovement ();
+		FixFalseMovement();
 
 		// move head
 		Vector3 translation = Tracker.Translation;
-		translation = new Vector3 (translation.x * TranslationScale.x, translation.y * TranslationScale.y, translation.z * TranslationScale.z);
+		translation = new Vector3(translation.x * TranslationScale.x, translation.y * TranslationScale.y, translation.z * TranslationScale.z);
 
 		// push back translation history
 		for (int i = 1; i < TranslationFilterWindowSize; i++)
-			translationHistory [i - 1] = translationHistory [i];
-		
+			translationHistory[i - 1] = translationHistory[i];
+
 		// add translation to history
-		translationHistory [TranslationFilterWindowSize - 1] = translation;
-		
+		translationHistory[TranslationFilterWindowSize - 1] = translation;
+
 		// filter value
-		Vector3 filteredTranslation = Filter (translation, translationHistory, TranslationFilterAmount);
+		Vector3 filteredTranslation = Filter(translation, translationHistory, TranslationFilterAmount);
 
 		HeadBone.position = filteredTranslation;
 
@@ -81,91 +82,96 @@ public class Movement : MonoBehaviour
 		HeadBone.position = oldHeadPosition;
 
 		Vector3 rotation = (Tracker.Rotation + RotationOffset);
-		rotation = new Vector3 (rotation.x * RotationScale.x, rotation.y * RotationScale.y, rotation.z * RotationScale.z);
+		rotation = new Vector3(rotation.x * RotationScale.x, rotation.y * RotationScale.y, rotation.z * RotationScale.z);
 
 		// push back rotation history
 		for (int i = 1; i < RotationFilterWindowSize; i++)
-			rotationHistory [i - 1] = rotationHistory [i];
-		
+			rotationHistory[i - 1] = rotationHistory[i];
+
 		// add rotation to history
-		rotationHistory [RotationFilterWindowSize - 1] = rotation;
-		
+		rotationHistory[RotationFilterWindowSize - 1] = rotation;
+
 		// filter value
-		Vector3 filteredRotation = Filter (rotation, rotationHistory, RotationFilterAmount);
+		Vector3 filteredRotation = Filter(rotation, rotationHistory, RotationFilterAmount);
 		HeadBone.localEulerAngles = filteredRotation;
 	}
-	
-	private float Filter (float value, float[] history, float amount)
+
+	private float Filter(float value, float[] history, float amount)
 	{
 		// get maximum variation
 		float maxVariation = 0f;
 		for (int i = 0; i < history.Length - 1; i++)
-			maxVariation = Mathf.Max (maxVariation, Mathf.Abs (value - history [i]));
-		
+			maxVariation = Mathf.Max(maxVariation, Mathf.Abs(value - history[i]));
+
 		// get weights
 		float[] weights = new float[history.Length];
-		for (int i = 0; i < weights.Length; i++) {
-			weights [i] = Mathf.Exp (-i * amount * maxVariation);
+		for (int i = 0; i < weights.Length; i++)
+		{
+			weights[i] = Mathf.Exp(-i * amount * maxVariation);
 		}
-		
+
 		// get sum of weights
 		float weightSum = 0f;
 		for (int i = 0; i < weights.Length; i++)
-			weightSum += weights [i];
-		
+			weightSum += weights[i];
+
 		// filter value
 		float filteredValue = 0f;
-		for (int i = 0; i < weights.Length; i++) {
-			filteredValue += weights [i] * history [i] / weightSum;
+		for (int i = 0; i < weights.Length; i++)
+		{
+			filteredValue += weights[i] * history[i] / weightSum;
 		}
-		
+
 		return filteredValue;
 	}
-	
-	private Vector3 Filter (Vector3 value, Vector3[] history, float amount)
+
+	private Vector3 Filter(Vector3 value, Vector3[] history, float amount)
 	{
 		// construct histories
 		float[] xHistory = new float[history.Length];
 		float[] yHistory = new float[history.Length];
 		float[] zHistory = new float[history.Length];
-		for (int i = 0; i < history.Length; i++) {
-			xHistory [i] = history [i].x;
-			yHistory [i] = history [i].y;
-			zHistory [i] = history [i].z;
+		for (int i = 0; i < history.Length; i++)
+		{
+			xHistory[i] = history[i].x;
+			yHistory[i] = history[i].y;
+			zHistory[i] = history[i].z;
 		}
-		
+
 		// filter values
-		float x = Filter (value.x, xHistory, amount);
-		float y = Filter (value.y, yHistory, amount);
-		float z = Filter (value.z, zHistory, amount);
-		
-		return new Vector3 (x, y, z);
+		float x = Filter(value.x, xHistory, amount);
+		float y = Filter(value.y, yHistory, amount);
+		float z = Filter(value.z, zHistory, amount);
+
+		return new Vector3(x, y, z);
 	}
 
 	// a quick fix for some false movements detected during tracking
-	private void FixFalseMovement ()
+	private void FixFalseMovement()
 	{
 
 		// fix for: false rotation while smiling
-		smile_left = Tracker.GetActionUnit ("au_lip_stretcher_left");
-		smile_right = Tracker.GetActionUnit ("au_lip_stretcher_right");
+		smile_left = Tracker.GetActionUnit("au_lip_stretcher_left");
+		smile_right = Tracker.GetActionUnit("au_lip_stretcher_right");
 
-		rotationFixScale = Mathf.Clamp01 ((Tracker.Rotation.x + 17f) / 34f);
+		rotationFixScale = Mathf.Clamp01((Tracker.Rotation.x + 17f) / 34f);
 
 
-		if (smile_left != null && smile_left.Value > 0) {
+		if (smile_left != null && smile_left.Value > 0)
+		{
 			Tracker.Rotation.x -= falseRotationValue * smile_left.Value * rotationFixScale;
 		}
-		if (smile_right != null && smile_right.Value > 0) {
+		if (smile_right != null && smile_right.Value > 0)
+		{
 			Tracker.Rotation.x -= falseRotationValue * smile_right.Value * rotationFixScale;
 		}
 
 
 		// fix for: false translation while raising eyebrows
-		brow_left = Tracker.GetActionUnit ("au_left_outer_brow_raiser");
-		brow_right = Tracker.GetActionUnit ("au_right_outer_brow_raiser");
+		brow_left = Tracker.GetActionUnit("au_left_outer_brow_raiser");
+		brow_right = Tracker.GetActionUnit("au_right_outer_brow_raiser");
 
-		Tracker.Translation.z += falseTranslationValue * Mathf.Clamp01 ((brow_left.Value + brow_right.Value - 0.1f) / 0.3f);
+		Tracker.Translation.z += falseTranslationValue * Mathf.Clamp01((brow_left.Value + brow_right.Value - 0.1f) / 0.3f);
 
 	}
 }

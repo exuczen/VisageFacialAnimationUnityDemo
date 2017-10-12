@@ -316,7 +316,7 @@ public class VisageTracker : MonoBehaviour
 			else
 				normalButton = GUI.Button (new Rect (Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 30, Screen.height / 3, Screen.width / 12), "Normal");
 			if (normalButton) {
-				VideoPreview preview = GameObject.Find ("VideoPreview").GetComponent<VideoPreview> ();
+				VisageVideoPreview preview = GameObject.Find ("VisageVideoPreview").GetComponent<VisageVideoPreview> ();
 				preview.DesiredScreenWidth = 1f;
 				preview.PreviewResults = true;
 				mask = false; 
@@ -327,7 +327,7 @@ public class VisageTracker : MonoBehaviour
 			else
 				maskButton = GUI.Button (new Rect (Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 30, Screen.height / 3, Screen.width / 12), "Mask");
 			if (maskButton) {
-				VideoPreview preview = GameObject.Find ("VideoPreview").GetComponent<VideoPreview> ();
+				VisageVideoPreview preview = GameObject.Find ("VisageVideoPreview").GetComponent<VisageVideoPreview> ();
 				preview.DesiredScreenWidth = 1f;
 				preview.PreviewResults = false;
 				mask = true;
