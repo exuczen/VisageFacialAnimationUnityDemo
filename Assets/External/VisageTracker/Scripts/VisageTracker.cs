@@ -4,10 +4,10 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.IO;
 
-/** Enum used for tracking status.
- */
 namespace Visage.FaceTracking
 {
+	/** Enum used for tracking status.
+	 */
 	public enum TrackStatus
 	{
 		Off = 0,
