@@ -623,7 +623,7 @@ GameObject:
   - component: {fileID: 1414689628}
   - component: {fileID: 1414689629}
   m_Layer: 0
-  m_Name: look at
+  m_Name: LookAt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -746,12 +746,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d879378cd87d2da4293e20957934f033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConfigFileEditor: Visage Tracker/Facial Features Tracker - High.cfg
-  ConfigFileStandalone: Visage Tracker/Facial Features Tracker - High.cfg
-  ConfigFileIOS: Facial Features Tracker - High.cfg
-  ConfigFileAndroid: Facial Features Tracker - High.cfg
-  ConfigFileOSX: Facial Features Tracker - High.cfg
-  licenseFileFolder: Visage Tracker/
+  ConfigFileEditor: VisageTracker/FacialFeaturesTracker-High.cfg
+  ConfigFileStandalone: VisageTracker/FacialFeaturesTracker-High.cfg
+  ConfigFileIOS: FacialFeaturesTracker-High.cfg
+  ConfigFileAndroid: FacialFeaturesTracker-High.cfg
+  ConfigFileOSX: FacialFeaturesTracker-High.cfg
+  licenseFileFolder: VisageTracker/
   licenseFileName: 900-638-182-995-087-495-807-784-735-158-947.vlc
   TrackerStatus: 0
   Translation: {x: 0, y: 0, z: 0}

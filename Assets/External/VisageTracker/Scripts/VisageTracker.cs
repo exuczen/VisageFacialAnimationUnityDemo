@@ -230,20 +230,20 @@ public class VisageTracker : MonoBehaviour
         {
 
             case RuntimePlatform.IPhonePlayer:
-                configFilePath = "Data/Raw/Visage Tracker/" + ConfigFileIOS;
-                licenseFilePath = "Data/Raw/Visage Tracker/" + licenseFileName;
+                configFilePath = "Data/Raw/VisageTracker/" + ConfigFileIOS;
+                licenseFilePath = "Data/Raw/VisageTracker/" + licenseFileName;
                 break;
             case RuntimePlatform.Android:
                 configFilePath = Application.persistentDataPath + "/" + ConfigFileAndroid;
                 licenseFilePath = Application.persistentDataPath + "/" + licenseFileName;
                 break;
             case RuntimePlatform.OSXPlayer:
-                configFilePath = Application.dataPath + "/Resources/Data/StreamingAssets/Visage Tracker/" + ConfigFileOSX;
-                licenseFilePath = Application.dataPath + "/Resources/Data/StreamingAssets/Visage Tracker/" + licenseFileName;
+                configFilePath = Application.dataPath + "/Resources/Data/StreamingAssets/VisageTracker/" + ConfigFileOSX;
+                licenseFilePath = Application.dataPath + "/Resources/Data/StreamingAssets/VisageTracker/" + licenseFileName;
                 break;
             case RuntimePlatform.OSXEditor:
-                configFilePath = Application.dataPath + "/StreamingAssets/Visage Tracker/" + ConfigFileOSX;
-                licenseFilePath = Application.dataPath + "/StreamingAssets/Visage Tracker/" + licenseFileName;
+                configFilePath = Application.dataPath + "/StreamingAssets/VisageTracker/" + ConfigFileOSX;
+                licenseFilePath = Application.dataPath + "/StreamingAssets/VisageTracker/" + licenseFileName;
                 break;
             case RuntimePlatform.WindowsEditor:
                 configFilePath = Application.streamingAssetsPath + "/" + ConfigFileEditor;
@@ -425,7 +425,7 @@ public class VisageTracker : MonoBehaviour
 	 */
 	bool InitializeTracker (string config, string license)
 	{
-		Debug.Log ("Visage Tracker: Initializing tracker with config: '" + config + "'");
+		Debug.Log ("VisageTracker: Initializing tracker with config: '" + config + "'");
 		
 		#if (UNITY_IPHONE) && UNITY_EDITOR
 		return false;
@@ -600,8 +600,8 @@ public class VisageTracker : MonoBehaviour
 		string[] pathsNeeded = {
 			"candide3.fdp",
 			"candide3.wfm",
-			"Facial Features Tracker - High.cfg",
-			"Facial Features Tracker - Low.cfg",
+			"FacialFeaturesTracker-High.cfg",
+			"FacialFeaturesTracker-Low.cfg",
 			"jk_300.fdp",
 			"jk_300.wfm",
             "jk_300.fdp",
@@ -622,7 +622,7 @@ public class VisageTracker : MonoBehaviour
 			, "900-638-182-995-087-495-807-784-735-158-947.vlc"
 		};
 		string outputDir;
-		string localDataFolder = "Visage Tracker";
+		string localDataFolder = "VisageTracker";
 		
 		StreamWriter sw;
 		
