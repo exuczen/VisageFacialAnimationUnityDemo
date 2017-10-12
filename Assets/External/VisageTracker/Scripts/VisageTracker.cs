@@ -286,9 +286,9 @@ namespace Visage.FaceTracking
 			if (!isTracking)
 			{
 				if (ImageWidth < ImageHeight)
-					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 7, Screen.width / 8, Screen.width / 8), " ", startTrackingStyle);
+					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", startTrackingStyle);
 				else
-					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 7, Screen.height / 8, Screen.height / 8), " ", startTrackingStyle);
+					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", startTrackingStyle);
 
 
 				if (trackButton)
@@ -298,9 +298,9 @@ namespace Visage.FaceTracking
 			if (isTracking)
 			{
 				if (ImageWidth < ImageHeight)
-					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 7, Screen.width / 8, Screen.width / 8), " ", stopTrackingStyle);
+					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", stopTrackingStyle);
 				else
-					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 7, Screen.height / 8, Screen.height / 8), " ", stopTrackingStyle);
+					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", stopTrackingStyle);
 
 
 				if (stopTrackButton)
@@ -313,9 +313,9 @@ namespace Visage.FaceTracking
 
 
 			if (ImageWidth < ImageHeight)
-				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.width / 6, Screen.height - Screen.width / 6, Screen.width / 6, Screen.width / 6), " ", switchCamButtonStyle);
+				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.width / 6, Screen.height - Screen.width / 2, Screen.width / 6, Screen.width / 6), " ", switchCamButtonStyle);
 			else
-				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.height / 6, Screen.height - Screen.height / 6, Screen.height / 6, Screen.height / 6), " ", switchCamButtonStyle);
+				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.height / 6, Screen.height - Screen.height / 2, Screen.height / 6, Screen.height / 6), " ", switchCamButtonStyle);
 
 			if (switchCamButton)
 				currentDevice = (currentDevice == 1) ? 0 : 1;
@@ -324,9 +324,9 @@ namespace Visage.FaceTracking
 			if (mask)
 			{
 				if (ImageWidth < ImageHeight)
-					normalButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 30, Screen.width / 3, Screen.height / 12), "Normal");
+					normalButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Normal");
 				else
-					normalButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 30, Screen.height / 3, Screen.width / 12), "Normal");
+					normalButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Normal");
 				if (normalButton)
 				{
 					VisageVideoPreview preview = GameObject.Find("VisageVideoPreview").GetComponent<VisageVideoPreview>();
@@ -338,9 +338,9 @@ namespace Visage.FaceTracking
 			else
 			{
 				if (ImageWidth < ImageHeight)
-					maskButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 30, Screen.width / 3, Screen.height / 12), "Mask");
+					maskButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Mask");
 				else
-					maskButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 30, Screen.height / 3, Screen.width / 12), "Mask");
+					maskButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Mask");
 				if (maskButton)
 				{
 					VisageVideoPreview preview = GameObject.Find("VisageVideoPreview").GetComponent<VisageVideoPreview>();
