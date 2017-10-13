@@ -271,6 +271,7 @@ namespace Visage.FaceTracking
 		{
 			//Debug.Log("<color=blue>VisageTracker.Awake</color>");
 			videoPreview.gameObject.SetActive(false);
+			canvas.gameObject.SetActive(false);
 		}
 
 		private void Start()
@@ -278,8 +279,7 @@ namespace Visage.FaceTracking
 			trackButton.onClick.AddListener(OnTrackButtonClick);
 			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
 			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
-			canvas.gameObject.SetActive(showGUI);
-
+			
 			if (initializeOnStart)
 			{
 				Initialize();
