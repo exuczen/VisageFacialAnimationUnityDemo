@@ -130,6 +130,9 @@ namespace Visage.FaceTracking
 		private GCHandle texturePixelsHandle;
 		public WebCamTexture CameraTexture = null;
 
+		[SerializeField]
+		private bool initializeOnStart = true;
+
 		/** Sets whether the action unit data is retrieved.
 		 */
 		public bool ActionUnitsEnabled = true;
@@ -175,6 +178,8 @@ namespace Visage.FaceTracking
 		public int defaultCameraWidth = -1;
 		public int defaultCameraHeight = -1;
 		public bool setCameraFieldOfView;
+		[SerializeField]
+		private bool startCameraOnEnable = true;
 
 		[Header("GUI")]
 		[SerializeField]
@@ -208,17 +213,18 @@ namespace Visage.FaceTracking
 		//		modelList.Add(model);
 		//}
 
+		private bool isInitialized;
+
 		private string configFilePath;
 
 		private string licenseFilePath;
 
-		/** This method is called before any of the Update methods are called the first time.
-		 * 
-		 * It initializes helper variables and the tracker.
-		 */
-		private void Awake()
+		public void Initialize()
 		{
-			Debug.Log("<color=blue>VisageTracker.Awake</color>");
+			if (isInitialized)
+				return;
+
+			Debug.Log("<color=blue>VisageTracker.Initialize</color>");
 
 			Translation = new Vector3(0, 0, 0);
 			Rotation = new Vector3(0, 0, 0);
@@ -254,8 +260,17 @@ namespace Visage.FaceTracking
 
 			// initialize tracker
 			InitializeTracker(configFilePath, licenseFilePath);
+			isInitialized = true;
+		}
+
+		/** This method is called before any of the Update methods are called the first time.
+		 * 
+		 * It initializes helper variables and the tracker.
+		 */
+		private void Awake()
+		{
+			//Debug.Log("<color=blue>VisageTracker.Awake</color>");
 			videoPreview.gameObject.SetActive(false);
-			canvas.gameObject.SetActive(showGUI);
 		}
 
 		private void Start()
@@ -264,6 +279,11 @@ namespace Visage.FaceTracking
 			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
 			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
 			canvas.gameObject.SetActive(showGUI);
+
+			if (initializeOnStart)
+			{
+				Initialize();
+			}
 		}
 
 		public void OnTrackButtonClick()
@@ -277,6 +297,7 @@ namespace Visage.FaceTracking
 
 		public void StartCamera(int deviceIndex, bool resetFrame)
 		{
+			isTracking = true;
 			currentDevice = deviceIndex;
 			currentOrientation = getDeviceOrientation();
 			OpenCamera(currentOrientation, currentDevice, defaultCameraWidth, defaultCameraHeight, isMirrored);
@@ -284,6 +305,16 @@ namespace Visage.FaceTracking
 			device = currentDevice;
 			if (resetFrame)
 				Frame = null;
+		}
+
+		public void StopCamera()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			this.androidCameraActivity.Call("closeCamera");
+#else
+			VisageTrackerNative._closeCamera();
+#endif
+			isTracking = false;
 		}
 
 		public void OnSwitchCameraButtonClick()
@@ -312,9 +343,11 @@ namespace Visage.FaceTracking
 			//check orientation and start camera
 			//Orientation = getDeviceOrientation();
 			//OpenCamera(Orientation, device, defaultCameraWidth, defaultCameraHeight, isMirrored);
-			StartCamera(device, false);
 
-			isTracking = true;
+			if (startCameraOnEnable)
+			{
+				StartCamera(device, true);
+			}
 			trackStartImage.gameObject.SetActive(false);
 			trackStopImage.gameObject.SetActive(true);
 			videoPreview.gameObject.SetActive(true);
@@ -327,15 +360,9 @@ namespace Visage.FaceTracking
 		private void OnDisable()
 		{
 			Debug.Log("<color=blue>VisageTracker.OnDisable</color>");
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-			this.androidCameraActivity.Call("closeCamera");
-#else
-			VisageTrackerNative._closeCamera();
-#endif
-			isTracking = false;
-			videoPreview.gameObject.SetActive(false);
+			StopCamera();
 			canvas.gameObject.SetActive(false);
+			videoPreview.gameObject.SetActive(false);
 		}
 
 		/** This method is called every frame.

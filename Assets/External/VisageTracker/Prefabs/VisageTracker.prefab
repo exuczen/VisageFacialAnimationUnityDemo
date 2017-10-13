@@ -514,6 +514,7 @@ MonoBehaviour:
   TexHeight: 0
   Frame: {fileID: 0}
   CameraTexture: {fileID: 0}
+  initializeOnStart: 1
   ActionUnitsEnabled: 1
   ActionUnitCount: 0
   ActionUnits: []
@@ -529,6 +530,7 @@ MonoBehaviour:
   defaultCameraWidth: -1
   defaultCameraHeight: -1
   setCameraFieldOfView: 1
+  startCameraOnEnable: 1
   showGUI: 1
   videoPreview: {fileID: 114759650007233932}
 --- !u!114 &114067070891064750
