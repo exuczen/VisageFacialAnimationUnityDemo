@@ -163,22 +163,6 @@ namespace Visage.FaceTracking
 		private Image trackStartImage;
 		[SerializeField]
 		private Image trackStopImage;
-		//public Texture2D imageSwitchCam;
-		//public Texture2D imageStartTracking;
-		//public Texture2D imageStopTracking;
-		//private bool trackButton;
-		//private bool stopTrackButton;
-		//private bool normalButton;
-		//private bool switchCamButton;
-		//private bool maskButton;
-		//private bool mask = false;
-		//private GUIStyle startTrackingStyle = null;
-		//private GUIStyle stopTrackingStyle = null;
-		//private GUIStyle customButtonStyle = null;
-		//private GUIStyle switchCamButtonStyle = null;
-		//GUIContent contentSwitchCam = new GUIContent();
-		//GUIContent contentStartTracking = new GUIContent();
-		//GUIContent contentStopTracking = new GUIContent();
 
 		private bool AppStarted = false;
 
@@ -235,21 +219,6 @@ namespace Visage.FaceTracking
 		private void Awake()
 		{
 			Debug.Log("<color=blue>VisageTracker.Awake</color>");
-			//contentSwitchCam.image = (Texture2D)imageSwitchCam;
-			//contentStartTracking.image = (Texture2D)imageStartTracking;
-			//contentStopTracking.image = (Texture2D)imageStopTracking;
-			//startTrackingStyle = new GUIStyle();
-			//startTrackingStyle.normal.background = (Texture2D)contentStartTracking.image;
-			//startTrackingStyle.active.background = (Texture2D)contentStartTracking.image;
-			//startTrackingStyle.hover.background = (Texture2D)contentStartTracking.image;
-			//stopTrackingStyle = new GUIStyle();
-			//stopTrackingStyle.normal.background = (Texture2D)contentStopTracking.image;
-			//stopTrackingStyle.active.background = (Texture2D)contentStopTracking.image;
-			//stopTrackingStyle.hover.background = (Texture2D)contentStopTracking.image;
-			//switchCamButtonStyle = new GUIStyle();
-			//switchCamButtonStyle.normal.background = (Texture2D)contentSwitchCam.image;
-			//switchCamButtonStyle.active.background = (Texture2D)contentSwitchCam.image;
-			//switchCamButtonStyle.hover.background = (Texture2D)contentSwitchCam.image;
 
 			Translation = new Vector3(0, 0, 0);
 			Rotation = new Vector3(0, 0, 0);
@@ -299,27 +268,6 @@ namespace Visage.FaceTracking
 
 		public void OnTrackButtonClick()
 		{
-			//if (!isTracking)
-			//{
-			//	if (ImageWidth < ImageHeight)
-			//		trackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", startTrackingStyle);
-			//	else
-			//		trackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", startTrackingStyle);
-			//	if (trackButton)
-			//		isTracking = true;
-			//}
-			//if (isTracking)
-			//{
-			//	if (ImageWidth < ImageHeight)
-			//		stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", stopTrackingStyle);
-			//	else
-			//		stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", stopTrackingStyle);
-			//	if (stopTrackButton)
-			//	{
-			//		isTracking = false;
-			//		TrackerStatus = TrackStatus.Off;
-			//	}
-			//}
 			isTracking = !isTracking;
 			trackStartImage.gameObject.SetActive(!isTracking);
 			trackStopImage.gameObject.SetActive(isTracking);
@@ -327,46 +275,24 @@ namespace Visage.FaceTracking
 				TrackerStatus = TrackStatus.Off;
 		}
 
+		public void StartCamera(int deviceIndex, bool resetFrame)
+		{
+			currentDevice = deviceIndex;
+			currentOrientation = getDeviceOrientation();
+			OpenCamera(currentOrientation, currentDevice, defaultCameraWidth, defaultCameraHeight, isMirrored);
+			Orientation = currentOrientation;
+			device = currentDevice;
+			if (resetFrame)
+				Frame = null;
+		}
+
 		public void OnSwitchCameraButtonClick()
 		{
-			//if (ImageWidth < ImageHeight)
-			//	switchCamButton = GUI.Button(new Rect(Screen.width - Screen.width / 6, Screen.height - Screen.width / 2, Screen.width / 6, Screen.width / 6), " ", switchCamButtonStyle);
-			//else
-			//	switchCamButton = GUI.Button(new Rect(Screen.width - Screen.height / 6, Screen.height - Screen.height / 2, Screen.height / 6, Screen.height / 6), " ", switchCamButtonStyle);
-			//if (switchCamButton)
-			//	currentDevice = (currentDevice == 1) ? 0 : 1;
-			currentDevice = (currentDevice == 1) ? 0 : 1;
+			StartCamera((currentDevice == 1) ? 0 : 1, true);
 		}
 
 		public void OnMaskToggleChange(bool enabled)
 		{
-			//if (mask)
-			//{
-			//	if (ImageWidth < ImageHeight)
-			//		normalButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Normal");
-			//	else
-			//		normalButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Normal");
-			//	if (normalButton)
-			//	{
-
-			//		videoPreview.DesiredScreenWidth = 1f;
-			//		videoPreview.PreviewResults = true;
-			//		mask = false;
-			//	}
-			//}
-			//else
-			//{
-			//	if (ImageWidth < ImageHeight)
-			//		maskButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Mask");
-			//	else
-			//		maskButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Mask");
-			//	if (maskButton)
-			//	{
-			//		videoPreview.DesiredScreenWidth = 1f;
-			//		videoPreview.PreviewResults = false;
-			//		mask = true;
-			//	}
-			//}
 			videoPreview.PreviewResults = enabled;
 		}
 
@@ -384,8 +310,9 @@ namespace Visage.FaceTracking
 			//	ActionUnitBinding.SetupBinding(this, configuration);
 
 			//check orientation and start camera
-			Orientation = getDeviceOrientation();
-			OpenCamera(Orientation, device, defaultCameraWidth, defaultCameraHeight, isMirrored);
+			//Orientation = getDeviceOrientation();
+			//OpenCamera(Orientation, device, defaultCameraWidth, defaultCameraHeight, isMirrored);
+			StartCamera(device, false);
 
 			isTracking = true;
 			trackStartImage.gameObject.SetActive(false);
@@ -411,7 +338,6 @@ namespace Visage.FaceTracking
 			canvas.gameObject.SetActive(false);
 		}
 
-
 		/** This method is called every frame.
 		 * 
 		 * It fetches the tracking data from the tracker and transforms controlled objects accordingly. 
@@ -426,24 +352,24 @@ namespace Visage.FaceTracking
 				Application.Quit();
 			}
 #if (UNITY_IPHONE) && UNITY_EDITOR
-		// no tracking on ios while in editor
-		return;
+			// no tracking on ios while in editor
+			return;
 #endif
 			// update tracker status, translation and rotation
 			int trackStatus;
 
 			if (isTracking)
 			{
-				currentOrientation = getDeviceOrientation();
+				//currentOrientation = getDeviceOrientation();
 
-				// check if orientation or camera device changed
-				if (currentOrientation != Orientation || currentDevice != device)
-				{
-					OpenCamera(currentOrientation, currentDevice, defaultCameraWidth, defaultCameraHeight, isMirrored);
-					Orientation = currentOrientation;
-					device = currentDevice;
-					Frame = null;
-				}
+				//// check if orientation or camera device changed
+				//if (currentOrientation != Orientation || currentDevice != device)
+				//{
+				//	OpenCamera(currentOrientation, currentDevice, defaultCameraWidth, defaultCameraHeight, isMirrored);
+				//	Orientation = currentOrientation;
+				//	device = currentDevice;
+				//	Frame = null;
+				//}
 
 				// grab new frame and start face tracking on it
 				VisageTrackerNative._grabFrame();
@@ -462,9 +388,9 @@ namespace Visage.FaceTracking
 			GetCameraInfo();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-		//waiting to get information about frame width and height
-        if (ImageWidth == 0 || ImageHeight == 0)
-            return;
+			//waiting to get information about frame width and height
+			if (ImageWidth == 0 || ImageHeight == 0)
+				return;
 #endif
 
 			// update gaze direction
@@ -480,7 +406,6 @@ namespace Visage.FaceTracking
 				RefreshActionUnits();
 		}
 
-
 		void OnDestroy()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -490,7 +415,6 @@ namespace Visage.FaceTracking
 #endif
 		}
 
-
 		/** This method initializes the tracker.
 		 */
 		bool InitializeTracker(string config, string license)
@@ -498,16 +422,15 @@ namespace Visage.FaceTracking
 			Debug.Log("VisageTracker: Initializing tracker with config: '" + config + "'");
 
 #if (UNITY_IPHONE) && UNITY_EDITOR
-		return false;
+			return false;
 #endif
-
 #if UNITY_ANDROID && !UNITY_EDITOR
-		// initialize visage vision
-		VisageTrackerNative._loadVisageVision();
-		Unzip();
+			// initialize visage vision
+			VisageTrackerNative._loadVisageVision();
+			Unzip();
 		
-		unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-		this.androidCameraActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
+			unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+			this.androidCameraActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
 #endif
 			// initialize tracker
 			VisageTrackerNative._initTracker(config, license);
@@ -581,16 +504,15 @@ namespace Visage.FaceTracking
 		void RefreshImage()
 		{
 #if (UNITY_IPHONE) && UNITY_EDITOR
-		return;
+			return;
 #endif
-
 			// create texture
 			if (Frame == null && isTracking)
 			{
 				TexWidth = Convert.ToInt32(Math.Pow(2.0, Math.Ceiling(Math.Log(ImageWidth) / Math.Log(2.0))));
 				TexHeight = Convert.ToInt32(Math.Pow(2.0, Math.Ceiling(Math.Log(ImageHeight) / Math.Log(2.0))));
 #if UNITY_ANDROID && !UNITY_EDITOR
-			Frame = new Texture2D (TexWidth, TexHeight, TextureFormat.RGB24, false);
+				Frame = new Texture2D (TexWidth, TexHeight, TextureFormat.RGB24, false);
 #else
 				Frame = new Texture2D(TexWidth, TexHeight, TextureFormat.RGBA32, false);
 #endif
@@ -611,10 +533,10 @@ namespace Visage.FaceTracking
 				((Texture2D)Frame).Apply();
 
 #elif UNITY_IPHONE || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_ANDROID
-            if (SystemInfo.graphicsDeviceVersion.StartsWith ("Metal"))
-            	VisageTrackerNative._bindTextureMetal (Frame.GetNativeTexturePtr ());
-            else
-            VisageTrackerNative._bindTexture ((int)Frame.GetNativeTexturePtr ());
+				if (SystemInfo.graphicsDeviceVersion.StartsWith ("Metal"))
+            		VisageTrackerNative._bindTextureMetal (Frame.GetNativeTexturePtr ());
+				else
+					VisageTrackerNative._bindTexture ((int)Frame.GetNativeTexturePtr ());
 #endif
 			}
 		}
@@ -623,20 +545,18 @@ namespace Visage.FaceTracking
 		void OpenCamera(int orientation, int currDevice, int width, int height, int mirrored)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		if (device == currDevice && AppStarted)
-			return;
-		//camera needs to be opened on main thread
-        this.androidCameraActivity.Call("runOnUiThread", new AndroidJavaRunnable(() => {
-            this.androidCameraActivity.Call("closeCamera");
-            this.androidCameraActivity.Call("GrabFromCamera", width, height, currDevice);
-        }));
-        AppStarted = true;
+			if (device == currDevice && AppStarted)
+				return;
+			//camera needs to be opened on main thread
+			this.androidCameraActivity.Call("runOnUiThread", new AndroidJavaRunnable(() => {
+				this.androidCameraActivity.Call("closeCamera");
+				this.androidCameraActivity.Call("GrabFromCamera", width, height, currDevice);
+			}));
+			AppStarted = true;
 #else
 			VisageTrackerNative._openCamera(orientation, currDevice, width, height, mirrored);
 #endif
-
 		}
-
 
 		/** Returns current device orientation.
 		 */
@@ -646,14 +566,14 @@ namespace Visage.FaceTracking
 
 			//Device orientation is obtained in AndroidCameraPlugin so we only need information about whether orientation is changed
 #if UNITY_ANDROID && !UNITY_EDITOR
-		int oldWidth = ImageWidth;
-		int oldHeight = ImageHeight;
-		VisageTrackerNative._getCameraInfo(out Focus, out ImageWidth, out ImageHeight);
+			int oldWidth = ImageWidth;
+			int oldHeight = ImageHeight;
+			VisageTrackerNative._getCameraInfo(out Focus, out ImageWidth, out ImageHeight);
 		
-		if ((oldWidth!=ImageWidth || oldHeight!=ImageHeight) && ImageWidth != 0 && ImageHeight !=0 && oldWidth != 0 && oldHeight !=0 )
-			devOrientation = (Orientation ==1) ? 0:1;
-		else
-			devOrientation = Orientation;
+			if ((oldWidth!=ImageWidth || oldHeight!=ImageHeight) && ImageWidth != 0 && ImageHeight !=0 && oldWidth != 0 && oldHeight !=0 )
+				devOrientation = (Orientation ==1) ? 0:1;
+			else
+				devOrientation = Orientation;
 #else
 
 			if (Input.deviceOrientation == DeviceOrientation.Portrait)
@@ -669,9 +589,7 @@ namespace Visage.FaceTracking
 			else
 				devOrientation = 0;
 #endif
-
 			return devOrientation;
-
 		}
 
 		void Unzip()
