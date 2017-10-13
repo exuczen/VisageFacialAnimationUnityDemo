@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Visage.FaceTracking
 {
-	public class FaceActionUnitModel : MonoBehaviour
+	public class VisageFaceModel : MonoBehaviour
 	{
 		[SerializeField]
 		private TextAsset configuration;
@@ -194,5 +194,5 @@ namespace Visage.FaceTracking
 			//Debug.Log("*"+ blendshapeName2+"*");
 		}
 
-	} 
+	}
 }

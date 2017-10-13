@@ -1154,7 +1154,7 @@ GameObject:
   - component: {fileID: 95816949787480894}
   - component: {fileID: 114863542327642608}
   - component: {fileID: 114349133530487110}
-  - component: {fileID: 114048535057209938}
+  - component: {fileID: 114755114642217994}
   m_Layer: 0
   m_Name: Jones
   m_TagString: Untagged
@@ -3057,19 +3057,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114048535057209938
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1634568797043342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79e65d7e5aa922144b5af92bb43bbaa8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configuration: {fileID: 4900000, guid: bc6e95857dd6e83439dc128b1260e36c, type: 3}
-  actionUnitBindings: []
 --- !u!114 &114349133530487110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3097,6 +3084,19 @@ MonoBehaviour:
   falseTranslationValue: 0
   eyebrowTreshold: 0
   falseRotationValue: 5
+--- !u!114 &114755114642217994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1634568797043342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba05e8becc03fe4daebcf8f4c2bb641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configuration: {fileID: 4900000, guid: bc6e95857dd6e83439dc128b1260e36c, type: 3}
+  actionUnitBindings: []
 --- !u!114 &114863542327642608
 MonoBehaviour:
   m_ObjectHideFlags: 1

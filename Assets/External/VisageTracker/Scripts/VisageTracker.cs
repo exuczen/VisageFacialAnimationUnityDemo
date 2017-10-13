@@ -285,6 +285,8 @@ namespace Visage.FaceTracking
 
 			// initialize tracker
 			InitializeTracker(configFilePath, licenseFilePath);
+			videoPreview.gameObject.SetActive(false);
+			canvas.gameObject.SetActive(showGUI);
 		}
 
 		private void Start()
@@ -388,6 +390,8 @@ namespace Visage.FaceTracking
 			isTracking = true;
 			trackStartImage.gameObject.SetActive(false);
 			trackStopImage.gameObject.SetActive(true);
+			videoPreview.gameObject.SetActive(true);
+			canvas.gameObject.SetActive(showGUI);
 
 			if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore)
 				Debug.Log("VisageTracker.Awake: Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
@@ -395,12 +399,16 @@ namespace Visage.FaceTracking
 
 		private void OnDisable()
 		{
+			Debug.Log("<color=blue>VisageTracker.OnDisable</color>");
+
 #if UNITY_ANDROID && !UNITY_EDITOR
 			this.androidCameraActivity.Call("closeCamera");
 #else
 			VisageTrackerNative._closeCamera();
 #endif
 			isTracking = false;
+			videoPreview.gameObject.SetActive(false);
+			canvas.gameObject.SetActive(false);
 		}
 
 
