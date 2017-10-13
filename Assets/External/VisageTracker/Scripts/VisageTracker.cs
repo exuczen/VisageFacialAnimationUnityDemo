@@ -4,6 +4,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace Visage.FaceTracking
 {
@@ -144,25 +145,40 @@ namespace Visage.FaceTracking
 		private string currentDir;
 		private string visageDir;
 
-
 		private Color32[] cameraImageData;
 
 		private int DisplayStatus = 0;
 		private bool isTracking = false;
 
-		GUIContent contentSwitchCam = new GUIContent();
-		GUIContent contentStartTracking = new GUIContent();
-		GUIContent contentStopTracking = new GUIContent();
 		[Header("Buttons")]
-		public Texture2D imageSwitchCam;
-		public Texture2D imageStartTracking;
-		public Texture2D imageStopTracking;
-		private bool trackButton;
-		private bool stopTrackButton;
-		private bool normalButton;
-		private bool switchCamButton;
-		private bool maskButton;
-		private bool mask = false;
+		[SerializeField]
+		private Canvas canvas;
+		[SerializeField]
+		private Button trackButton;
+		[SerializeField]
+		private Button switchCameraButton;
+		[SerializeField]
+		private Toggle showMaskToggle;
+		[SerializeField]
+		private Image trackStartImage;
+		[SerializeField]
+		private Image trackStopImage;
+		//public Texture2D imageSwitchCam;
+		//public Texture2D imageStartTracking;
+		//public Texture2D imageStopTracking;
+		//private bool trackButton;
+		//private bool stopTrackButton;
+		//private bool normalButton;
+		//private bool switchCamButton;
+		//private bool maskButton;
+		//private bool mask = false;
+		//private GUIStyle startTrackingStyle = null;
+		//private GUIStyle stopTrackingStyle = null;
+		//private GUIStyle customButtonStyle = null;
+		//private GUIStyle switchCamButtonStyle = null;
+		//GUIContent contentSwitchCam = new GUIContent();
+		//GUIContent contentStartTracking = new GUIContent();
+		//GUIContent contentStopTracking = new GUIContent();
 
 		private bool AppStarted = false;
 
@@ -179,11 +195,8 @@ namespace Visage.FaceTracking
 		[Header("GUI")]
 		[SerializeField]
 		private bool showGUI;
-
-		private GUIStyle startTrackingStyle = null;
-		private GUIStyle stopTrackingStyle = null;
-		private GUIStyle customButtonStyle = null;
-		private GUIStyle switchCamButtonStyle = null;
+		[SerializeField]
+		private VisageVideoPreview videoPreview;
 
 		private AndroidJavaClass unity;
 
@@ -222,25 +235,21 @@ namespace Visage.FaceTracking
 		private void Awake()
 		{
 			Debug.Log("<color=blue>VisageTracker.Awake</color>");
-			contentSwitchCam.image = (Texture2D)imageSwitchCam;
-			contentStartTracking.image = (Texture2D)imageStartTracking;
-			contentStopTracking.image = (Texture2D)imageStopTracking;
-
-			startTrackingStyle = new GUIStyle();
-			startTrackingStyle.normal.background = (Texture2D)contentStartTracking.image;
-			startTrackingStyle.active.background = (Texture2D)contentStartTracking.image;
-			startTrackingStyle.hover.background = (Texture2D)contentStartTracking.image;
-
-			stopTrackingStyle = new GUIStyle();
-			stopTrackingStyle.normal.background = (Texture2D)contentStopTracking.image;
-			stopTrackingStyle.active.background = (Texture2D)contentStopTracking.image;
-			stopTrackingStyle.hover.background = (Texture2D)contentStopTracking.image;
-
-			switchCamButtonStyle = new GUIStyle();
-			switchCamButtonStyle.normal.background = (Texture2D)contentSwitchCam.image;
-			switchCamButtonStyle.active.background = (Texture2D)contentSwitchCam.image;
-			switchCamButtonStyle.hover.background = (Texture2D)contentSwitchCam.image;
-
+			//contentSwitchCam.image = (Texture2D)imageSwitchCam;
+			//contentStartTracking.image = (Texture2D)imageStartTracking;
+			//contentStopTracking.image = (Texture2D)imageStopTracking;
+			//startTrackingStyle = new GUIStyle();
+			//startTrackingStyle.normal.background = (Texture2D)contentStartTracking.image;
+			//startTrackingStyle.active.background = (Texture2D)contentStartTracking.image;
+			//startTrackingStyle.hover.background = (Texture2D)contentStartTracking.image;
+			//stopTrackingStyle = new GUIStyle();
+			//stopTrackingStyle.normal.background = (Texture2D)contentStopTracking.image;
+			//stopTrackingStyle.active.background = (Texture2D)contentStopTracking.image;
+			//stopTrackingStyle.hover.background = (Texture2D)contentStopTracking.image;
+			//switchCamButtonStyle = new GUIStyle();
+			//switchCamButtonStyle.normal.background = (Texture2D)contentSwitchCam.image;
+			//switchCamButtonStyle.active.background = (Texture2D)contentSwitchCam.image;
+			//switchCamButtonStyle.hover.background = (Texture2D)contentSwitchCam.image;
 
 			Translation = new Vector3(0, 0, 0);
 			Rotation = new Vector3(0, 0, 0);
@@ -278,6 +287,87 @@ namespace Visage.FaceTracking
 			InitializeTracker(configFilePath, licenseFilePath);
 		}
 
+		private void Start()
+		{
+			trackButton.onClick.AddListener(OnTrackButtonClick);
+			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
+			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
+			canvas.gameObject.SetActive(showGUI);
+		}
+
+		public void OnTrackButtonClick()
+		{
+			//if (!isTracking)
+			//{
+			//	if (ImageWidth < ImageHeight)
+			//		trackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", startTrackingStyle);
+			//	else
+			//		trackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", startTrackingStyle);
+			//	if (trackButton)
+			//		isTracking = true;
+			//}
+			//if (isTracking)
+			//{
+			//	if (ImageWidth < ImageHeight)
+			//		stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", stopTrackingStyle);
+			//	else
+			//		stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", stopTrackingStyle);
+			//	if (stopTrackButton)
+			//	{
+			//		isTracking = false;
+			//		TrackerStatus = TrackStatus.Off;
+			//	}
+			//}
+			isTracking = !isTracking;
+			trackStartImage.gameObject.SetActive(!isTracking);
+			trackStopImage.gameObject.SetActive(isTracking);
+			if (!isTracking)
+				TrackerStatus = TrackStatus.Off;
+		}
+
+		public void OnSwitchCameraButtonClick()
+		{
+			//if (ImageWidth < ImageHeight)
+			//	switchCamButton = GUI.Button(new Rect(Screen.width - Screen.width / 6, Screen.height - Screen.width / 2, Screen.width / 6, Screen.width / 6), " ", switchCamButtonStyle);
+			//else
+			//	switchCamButton = GUI.Button(new Rect(Screen.width - Screen.height / 6, Screen.height - Screen.height / 2, Screen.height / 6, Screen.height / 6), " ", switchCamButtonStyle);
+			//if (switchCamButton)
+			//	currentDevice = (currentDevice == 1) ? 0 : 1;
+			currentDevice = (currentDevice == 1) ? 0 : 1;
+		}
+
+		public void OnMaskToggleChange(bool enabled)
+		{
+			//if (mask)
+			//{
+			//	if (ImageWidth < ImageHeight)
+			//		normalButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Normal");
+			//	else
+			//		normalButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Normal");
+			//	if (normalButton)
+			//	{
+
+			//		videoPreview.DesiredScreenWidth = 1f;
+			//		videoPreview.PreviewResults = true;
+			//		mask = false;
+			//	}
+			//}
+			//else
+			//{
+			//	if (ImageWidth < ImageHeight)
+			//		maskButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Mask");
+			//	else
+			//		maskButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Mask");
+			//	if (maskButton)
+			//	{
+			//		videoPreview.DesiredScreenWidth = 1f;
+			//		videoPreview.PreviewResults = false;
+			//		mask = true;
+			//	}
+			//}
+			videoPreview.PreviewResults = enabled;
+		}
+
 		private void OnEnable()
 		{
 			Debug.Log("<color=blue>VisageTracker.OnEnable</color>");
@@ -296,6 +386,8 @@ namespace Visage.FaceTracking
 			OpenCamera(Orientation, device, defaultCameraWidth, defaultCameraHeight, isMirrored);
 
 			isTracking = true;
+			trackStartImage.gameObject.SetActive(false);
+			trackStopImage.gameObject.SetActive(true);
 
 			if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore)
 				Debug.Log("VisageTracker.Awake: Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
@@ -311,81 +403,6 @@ namespace Visage.FaceTracking
 			isTracking = false;
 		}
 
-		void OnGUI()
-		{
-			if (!showGUI)
-				return;
-
-			if (!isTracking)
-			{
-				if (ImageWidth < ImageHeight)
-					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", startTrackingStyle);
-				else
-					trackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", startTrackingStyle);
-
-
-				if (trackButton)
-					isTracking = true;
-			}
-
-			if (isTracking)
-			{
-				if (ImageWidth < ImageHeight)
-					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.width / 2, Screen.width / 8, Screen.width / 8), " ", stopTrackingStyle);
-				else
-					stopTrackButton = GUI.Button(new Rect(0, Screen.height - Screen.height / 2, Screen.height / 8, Screen.height / 8), " ", stopTrackingStyle);
-
-
-				if (stopTrackButton)
-				{
-					isTracking = false;
-					TrackerStatus = TrackStatus.Off;
-				}
-			}
-
-
-
-			if (ImageWidth < ImageHeight)
-				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.width / 6, Screen.height - Screen.width / 2, Screen.width / 6, Screen.width / 6), " ", switchCamButtonStyle);
-			else
-				switchCamButton = GUI.Button(new Rect(Screen.width - Screen.height / 6, Screen.height - Screen.height / 2, Screen.height / 6, Screen.height / 6), " ", switchCamButtonStyle);
-
-			if (switchCamButton)
-				currentDevice = (currentDevice == 1) ? 0 : 1;
-
-
-			if (mask)
-			{
-				if (ImageWidth < ImageHeight)
-					normalButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Normal");
-				else
-					normalButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Normal");
-				if (normalButton)
-				{
-					VisageVideoPreview preview = GameObject.Find("VisageVideoPreview").GetComponent<VisageVideoPreview>();
-					preview.DesiredScreenWidth = 1f;
-					preview.PreviewResults = true;
-					mask = false;
-				}
-			}
-			else
-			{
-				if (ImageWidth < ImageHeight)
-					maskButton = GUI.Button(new Rect(Screen.width - Screen.width / 30 - Screen.width / 3, Screen.height / 6, Screen.width / 3, Screen.height / 12), "Mask");
-				else
-					maskButton = GUI.Button(new Rect(Screen.width - Screen.height / 30 - Screen.height / 3, Screen.width / 6, Screen.height / 3, Screen.width / 12), "Mask");
-				if (maskButton)
-				{
-					VisageVideoPreview preview = GameObject.Find("VisageVideoPreview").GetComponent<VisageVideoPreview>();
-					preview.DesiredScreenWidth = 1f;
-					preview.PreviewResults = false;
-					mask = true;
-				}
-			}
-
-		}
-
-
 
 		/** This method is called every frame.
 		 * 
@@ -394,26 +411,21 @@ namespace Visage.FaceTracking
 		 * And lastly it refreshes the video frame texture with the new frame data.
 		 * 
 		 */
-		void Update()
+		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
 				Application.Quit();
 			}
-
 #if (UNITY_IPHONE) && UNITY_EDITOR
 		// no tracking on ios while in editor
 		return;
 #endif
-
-
 			// update tracker status, translation and rotation
 			int trackStatus;
 
 			if (isTracking)
 			{
-
-
 				currentOrientation = getDeviceOrientation();
 
 				// check if orientation or camera device changed
@@ -430,10 +442,8 @@ namespace Visage.FaceTracking
 				trackStatus = VisageTrackerNative._track();
 				VisageTrackerNative._get3DData(out Translation.x, out Translation.y, out Translation.z, out Rotation.x, out Rotation.y, out Rotation.z);
 
-
 				TrackerStatus = (TrackStatus)trackStatus;
 				//	isTracking = TrackerStatus != 0;
-
 			}
 
 			// exit if no tracking
