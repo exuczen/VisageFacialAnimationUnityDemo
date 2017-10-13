@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Visage.FaceTracking
 {
@@ -184,7 +185,7 @@ namespace Visage.FaceTracking
 		private GUIStyle customButtonStyle = null;
 		private GUIStyle switchCamButtonStyle = null;
 
-		AndroidJavaClass unity;
+		private AndroidJavaClass unity;
 
 		#endregion
 
@@ -198,12 +199,29 @@ namespace Visage.FaceTracking
 			}
 		}
 
+		//private List<FaceActionUnitModel> modelList;
+		//public void RemoveModel(FaceActionUnitModel model)
+		//{
+		//	if (!modelList.Contains(model))
+		//		modelList.Remove(model);
+		//}
+		//public void AddModel(FaceActionUnitModel model)
+		//{
+		//	if (!modelList.Contains(model))
+		//		modelList.Add(model);
+		//}
+
+		private string configFilePath;
+
+		private string licenseFilePath;
+
 		/** This method is called before any of the Update methods are called the first time.
 		 * 
 		 * It initializes helper variables and the tracker.
 		 */
 		private void Awake()
 		{
+			Debug.Log("<color=blue>VisageTracker.Awake</color>");
 			contentSwitchCam.image = (Texture2D)imageSwitchCam;
 			contentStartTracking.image = (Texture2D)imageStartTracking;
 			contentStopTracking.image = (Texture2D)imageStopTracking;
@@ -228,8 +246,8 @@ namespace Visage.FaceTracking
 			Rotation = new Vector3(0, 0, 0);
 
 			// choose config file
-			string configFilePath = Application.streamingAssetsPath + "/" + ConfigFileStandalone;
-			string licenseFilePath = Application.streamingAssetsPath + "/" + licenseFileFolder;
+			this.configFilePath = Application.streamingAssetsPath + "/" + ConfigFileStandalone;
+			this.licenseFilePath = Application.streamingAssetsPath + "/" + licenseFileFolder;
 
 			switch (Application.platform)
 			{
@@ -258,6 +276,11 @@ namespace Visage.FaceTracking
 
 			// initialize tracker
 			InitializeTracker(configFilePath, licenseFilePath);
+		}
+
+		private void OnEnable()
+		{
+			Debug.Log("<color=blue>VisageTracker.OnEnable</color>");
 
 			// clear all existing binding components
 			//ActionUnitBinding[] existingBindings = GetComponents<ActionUnitBinding> ();
@@ -276,6 +299,16 @@ namespace Visage.FaceTracking
 
 			if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore)
 				Debug.Log("VisageTracker.Awake: Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
+		}
+
+		private void OnDisable()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR
+			this.androidCameraActivity.Call("closeCamera");
+#else
+			VisageTrackerNative._closeCamera();
+#endif
+			isTracking = false;
 		}
 
 		void OnGUI()
@@ -433,7 +466,7 @@ namespace Visage.FaceTracking
 		void OnDestroy()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR
-        this.androidCameraActivity.Call("closeCamera");
+			this.androidCameraActivity.Call("closeCamera");
 #else
 			VisageTrackerNative._closeCamera();
 #endif
