@@ -8,7 +8,7 @@ namespace Visage.FaceTracking
 {
 	public static partial class VisageTrackerNative
 	{
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 		/** This function initialises the tracker.
 		 * 
 		 * Implemented in VisageTrackerUnityPlugin library.
