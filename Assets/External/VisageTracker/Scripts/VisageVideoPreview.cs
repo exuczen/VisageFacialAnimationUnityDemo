@@ -29,7 +29,7 @@ namespace Visage.FaceTracking
 			Offset.y = (Screen.height - Height) / 2;
 			if (Tracker.TrackerStatus != TrackStatus.Off)
 			{
-
+				Tracker.RefreshImage();
 				if (Tracker.Frame != null && Camera.current != Camera.main)
 				{
 					//Rect rect = new Rect (Offset.x, Screen.height - Offset.y, Width, -Height);

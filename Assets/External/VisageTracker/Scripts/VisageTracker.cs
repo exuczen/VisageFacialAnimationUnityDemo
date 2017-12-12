@@ -219,6 +219,18 @@ namespace Visage.FaceTracking
 
 		private string licenseFilePath;
 
+		public void SetVideoPreviewActive(bool active)
+		{
+			videoPreview.gameObject.SetActive(active);
+			videoPreview.PreviewResults = active && showMaskToggle.isOn;
+			canvas.gameObject.SetActive(active && showGUI);
+			if (Frame != null)
+			{
+				Destroy(Frame);
+				Frame = null;
+			}
+		}
+
 		public void Initialize()
 		{
 			if (isInitialized)
@@ -272,6 +284,7 @@ namespace Visage.FaceTracking
 			//Debug.Log("<color=blue>VisageTracker.Awake</color>");
 			videoPreview.gameObject.SetActive(false);
 			canvas.gameObject.SetActive(false);
+			showMaskToggle.isOn = true;
 		}
 
 		private void Start()
@@ -303,8 +316,11 @@ namespace Visage.FaceTracking
 			OpenCamera(currentOrientation, currentDevice, defaultCameraWidth, defaultCameraHeight, isMirrored);
 			Orientation = currentOrientation;
 			device = currentDevice;
-			if (resetFrame)
+			if (resetFrame && Frame != null)
+			{
+				Destroy(Frame);
 				Frame = null;
+			}
 		}
 
 		public void StopCamera()
@@ -350,9 +366,7 @@ namespace Visage.FaceTracking
 			}
 			trackStartImage.gameObject.SetActive(false);
 			trackStopImage.gameObject.SetActive(true);
-			videoPreview.gameObject.SetActive(true);
-			canvas.gameObject.SetActive(showGUI);
-
+			SetVideoPreviewActive(true);
 			if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore)
 				Debug.Log("VisageTracker.Awake: Notice: if graphics API is set to OpenGLCore, the texture might not get properly updated.");
 		}
@@ -361,8 +375,7 @@ namespace Visage.FaceTracking
 		{
 			Debug.Log("<color=blue>VisageTracker.OnDisable</color>");
 			StopCamera();
-			canvas.gameObject.SetActive(false);
-			videoPreview.gameObject.SetActive(false);
+			SetVideoPreviewActive(false);
 		}
 
 		/** This method is called every frame.
@@ -426,7 +439,7 @@ namespace Visage.FaceTracking
 			GazeDirection = new Vector2(gazeDirection[0] * Mathf.Rad2Deg, gazeDirection[1] * Mathf.Rad2Deg);
 
 			// get image
-			RefreshImage();
+			//RefreshImage();
 
 			// get action units
 			if (ActionUnitsEnabled)
@@ -528,7 +541,7 @@ namespace Visage.FaceTracking
 			}
 		}
 
-		void RefreshImage()
+		public void RefreshImage()
 		{
 #if (UNITY_IPHONE) && UNITY_EDITOR
 			return;
@@ -544,7 +557,7 @@ namespace Visage.FaceTracking
 				Frame = new Texture2D(TexWidth, TexHeight, TextureFormat.RGBA32, false);
 #endif
 
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 				// "pin" the pixel array in memory, so we can pass direct pointer to it's data to the plugin,
 				// without costly marshaling of array of structures.
 				texturePixels = ((Texture2D)Frame).GetPixels32(0);
@@ -553,7 +566,7 @@ namespace Visage.FaceTracking
 			}
 			if (Frame != null && isTracking)
 			{
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 				// send memory address of textures' pixel data to VisageTrackerUnityPlugin
 				VisageTrackerNative._setFrameData(texturePixelsHandle.AddrOfPinnedObject());
 				((Texture2D)Frame).SetPixels32(texturePixels, 0);
