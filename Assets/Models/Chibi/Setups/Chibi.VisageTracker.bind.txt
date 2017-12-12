@@ -88,7 +88,7 @@ au_reye_closed;                 Eyelashes:A_Eyes_Winking;				0.4;             0.
 # au_reye_closed;                 Head:ON_IF_Eyes_Closed_Half;			0.4;             0.7;            0;          1.0;        4;                  0.3;
 # au_leye_closed;                 Eyelashes:ON_IF_Eyes_Closed_Half;		0.4;             0.7;            0;          1.0;        4;                  0.3;
 # au_reye_closed;                 Eyelashes:ON_IF_Eyes_Closed_Half;		0.4;             0.7;            0;          1.0;        4;                  0.3;
-au_lip_stretcher_left;			Head:A_Mouth_Kiss;						-0.2;	         	0;	        1;			1.0;		4;					1;
+au_lip_stretcher_left;			Head:A_Mouth_Kiss;						-0.4;	         	0;	        1;			1.0;		4;					1;
 au_left_inner_brow_raiser;		Head:A_Eyebrows_Frown;					-0.4;	    	-0.1;	        	1;			1.0;		4;					0.3;
 au_left_inner_brow_raiser;		Eyebrows:A_Eyebrows_Frown;				-0.4;	    	-0.1;	    	    1;			1.0;		4;					0.3;
 au_right_inner_brow_raiser;		Head:A_Eyebrows_Frown;					-0.4;	    	-0.1;	    	    1;			1.0;		4;					0.3;
