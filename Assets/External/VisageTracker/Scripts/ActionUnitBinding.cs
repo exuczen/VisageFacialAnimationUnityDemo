@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 namespace Visage.FaceTracking
 {
@@ -38,7 +39,19 @@ namespace Visage.FaceTracking
 			normalizedValueHistory = new float[FilterWindowSize];
 		}
 
-		public void UpdateAction()
+		public void SetBlenshapeWeight(Dictionary<string, byte> blendshapeWeights)
+		{
+			// apply to all targets
+			foreach (ActionUnitBindingTarget target in Targets)
+			{
+				if (target.BlendshapeIndex >= 0 && blendshapeWeights.ContainsKey(target.BlendshapeName))
+				{
+					target.Renderer.SetBlendShapeWeight(target.BlendshapeIndex, blendshapeWeights[target.BlendshapeName]);
+				}
+			}
+		}
+
+		public void UpdateAction(Dictionary<string, byte> blendshapeWeights)
 		{
 			if (Tracker == null)
 				return;
@@ -69,7 +82,14 @@ namespace Visage.FaceTracking
 				foreach (ActionUnitBindingTarget target in Targets)
 				{
 					if (target.BlendshapeIndex >= 0 && target.Weight >= 0f)
-						target.Renderer.SetBlendShapeWeight(target.BlendshapeIndex, FilteredValue * Weight * target.Weight * 100f);
+					{
+						float value = FilteredValue * Weight * target.Weight * 100f;
+						target.Renderer.SetBlendShapeWeight(target.BlendshapeIndex, value);
+						if (blendshapeWeights.ContainsKey(target.BlendshapeName))
+						{
+							blendshapeWeights[target.BlendshapeName] = (byte)value;
+						}
+					}
 				}
 			}
 		}

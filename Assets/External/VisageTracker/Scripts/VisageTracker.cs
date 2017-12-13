@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Visage.FaceTracking
 {
@@ -152,10 +153,18 @@ namespace Visage.FaceTracking
 
 		private int DisplayStatus = 0;
 		private bool isTracking = false;
+		private bool isPlaying = false;
+		private bool isRecording = false;
+
+		public bool IsRecording { get { return isRecording; } }
+		public bool IsPlaying { get { return isPlaying; } }
+		public bool IsTracking { get { return isTracking; } }
 
 		[Header("Buttons")]
 		[SerializeField]
 		private Canvas canvas;
+		[SerializeField]
+		private Button recordingButton;
 		[SerializeField]
 		private Button trackButton;
 		[SerializeField]
@@ -166,6 +175,10 @@ namespace Visage.FaceTracking
 		private Image trackStartImage;
 		[SerializeField]
 		private Image trackStopImage;
+		[SerializeField]
+		private Image recordingStartImage;
+		[SerializeField]
+		private Image recordingStopImage;
 
 		private bool AppStarted = false;
 
@@ -289,7 +302,7 @@ namespace Visage.FaceTracking
 
 		private void Start()
 		{
-			trackButton.onClick.AddListener(OnTrackButtonClick);
+			//trackButton.onClick.AddListener(OnTrackButtonClick);
 			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
 			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
 			
@@ -299,13 +312,43 @@ namespace Visage.FaceTracking
 			}
 		}
 
-		public void OnTrackButtonClick()
+		public void AddListenerToPlayButton(UnityAction action)
 		{
-			isTracking = !isTracking;
-			trackStartImage.gameObject.SetActive(!isTracking);
-			trackStopImage.gameObject.SetActive(isTracking);
+			trackButton.onClick.AddListener(action);
+		}
+
+		public void AddListenerToRecordingButton(UnityAction action)
+		{
+			recordingButton.onClick.AddListener(action);
+		}
+
+		public void SetPlaying(bool playing)
+		{
+			SetPlaying(playing, true);
+		}
+
+		public void SetPlaying(bool playing, bool buttonEnabled)
+		{
+			isPlaying = playing;
+			trackStartImage.gameObject.SetActive(!isPlaying);
+			trackStopImage.gameObject.SetActive(isPlaying);
+			trackButton.gameObject.SetActive(buttonEnabled);
+		}
+
+		public void SetRecording(bool recording)
+		{
+			isRecording = isTracking = recording;
+			recordingStartImage.gameObject.SetActive(!isTracking);
+			recordingStopImage.gameObject.SetActive(isTracking);
 			if (!isTracking)
+			{
 				TrackerStatus = TrackStatus.Off;
+				SetPlaying(false, true);
+			}
+			else
+			{
+				SetPlaying(true, false);
+			}
 		}
 
 		public void StartCamera(int deviceIndex, bool resetFrame)

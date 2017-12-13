@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace Visage.FaceTracking
@@ -19,17 +21,100 @@ namespace Visage.FaceTracking
 
 		private VisageTracker tracker;
 
+		private BlendshapeRecorder blendshapeRecorder;
+
+		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, "blendshapeRecording"); } }
+
+		int frameIndex;
+
 		private void Start()
 		{
 			SetupBinding(VisageTracker.Instance);
+			
+			tracker.AddListenerToPlayButton(OnPlayingButtonClick);
+			tracker.AddListenerToRecordingButton(OnRecordingButtonClick);
+
+			string headRendererName = "Head";
+			SkinnedMeshRenderer headRenderer;
+			if (skinnedMeshRenderes.ContainsKey(headRendererName))
+			{
+				headRenderer = skinnedMeshRenderes[headRendererName];
+				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer);
+			}
+		}
+
+		private void OnPlayingButtonClick()
+		{
+			if (tracker.IsPlaying)
+			{
+				tracker.SetPlaying(false);
+			}
+			else if (blendshapeRecorder.RecordedFramesCount > 0)
+			{
+				tracker.SetPlaying(true);
+				blendshapeRecorder.StartReplay();
+			}
+			Debug.Log("isPlaying=" + tracker.IsPlaying + " blendshapeRecorder.RecordedFramesCount =" + blendshapeRecorder.RecordedFramesCount);
+			frameIndex = 0;
+		}
+
+		private void OnRecordingButtonClick()
+		{
+			string filename = "blendshapesRecording";
+			string filepath = Path.Combine(Application.persistentDataPath, filename);
+
+			if (tracker.IsRecording)
+			{
+				blendshapeRecorder.StopRecording();
+				blendshapeRecorder.SaveBlendshapesRecording(BlendshapeRecordingFilePath);
+				blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath);
+				tracker.SetRecording(false);
+			}
+			else
+			{
+				blendshapeRecorder.StartRecording();
+				tracker.SetRecording(true);
+			}
+			frameIndex = 0;
+			Debug.Log("isRecording=" + tracker.IsRecording);
 		}
 
 		private void Update()
 		{
-			foreach (var binding in actionUnitBindings)
+		}
+
+		private void FixedUpdate()
+		{
+			if (tracker.IsTracking)
 			{
-				binding.UpdateAction();
+				foreach (var binding in actionUnitBindings)
+				{
+					binding.UpdateAction(blendshapeRecorder.blendshapeWeights);
+				}
+				if (tracker.IsRecording)
+				{
+					if (!blendshapeRecorder.SaveBlendshapeWeights())
+					{
+						OnRecordingButtonClick();
+					}
+				}
 			}
+			else if (tracker.IsPlaying)
+			{
+				if (blendshapeRecorder.LoadBlendsapeWeights())
+				{
+					foreach (var binding in actionUnitBindings)
+					{
+						binding.SetBlenshapeWeight(blendshapeRecorder.blendshapeWeights);
+					}
+				}
+				else
+				{
+					OnPlayingButtonClick();
+				}
+			}
+
+			frameIndex++;
 		}
 
 		private void SetupBinding(VisageTracker tracker)
@@ -174,6 +259,7 @@ namespace Visage.FaceTracking
 						binding.Targets[0] = new ActionUnitBindingTarget();
 						binding.Targets[0].Renderer = renderer;
 						binding.Targets[0].BlendshapeIndex = blendshapeIndex;
+						binding.Targets[0].BlendshapeName = blendshapeName;
 						binding.Targets[0].Weight = 1f;
 						debugLogText += gameObject.name + ".SetupBinding : " + blendshapeObjectName + " : " + blendshapeName + " : " + blendshapeIndex + "\n";
 						actionUnitBindings.Add(binding);

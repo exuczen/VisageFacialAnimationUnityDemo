@@ -12,6 +12,7 @@ namespace Visage.FaceTracking
 
 		public SkinnedMeshRenderer Renderer;
 		public int BlendshapeIndex;
+		public string BlendshapeName;
 		public float Weight = 1f;
 	} 
 }
