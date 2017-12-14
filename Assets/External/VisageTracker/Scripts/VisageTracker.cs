@@ -164,6 +164,8 @@ namespace Visage.FaceTracking
 		[SerializeField]
 		private Canvas canvas;
 		[SerializeField]
+		private Button sendRecordingButton;
+		[SerializeField]
 		private Button recordingButton;
 		[SerializeField]
 		private Button trackButton;
@@ -179,6 +181,8 @@ namespace Visage.FaceTracking
 		private Image recordingStartImage;
 		[SerializeField]
 		private Image recordingStopImage;
+		[SerializeField]
+		public Text messageSendText;
 
 		private bool AppStarted = false;
 
@@ -305,11 +309,17 @@ namespace Visage.FaceTracking
 			//trackButton.onClick.AddListener(OnTrackButtonClick);
 			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
 			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
+			sendRecordingButton.gameObject.SetActive(false);
 			
 			if (initializeOnStart)
 			{
 				Initialize();
 			}
+		}
+
+		public void AddListenerToSendRecordingButton(UnityAction action)
+		{
+			sendRecordingButton.onClick.AddListener(action);
 		}
 
 		public void AddListenerToPlayButton(UnityAction action)
@@ -333,6 +343,9 @@ namespace Visage.FaceTracking
 			trackStartImage.gameObject.SetActive(!isPlaying);
 			trackStopImage.gameObject.SetActive(isPlaying);
 			trackButton.gameObject.SetActive(buttonEnabled);
+			sendRecordingButton.gameObject.SetActive(buttonEnabled && !playing);
+			if (buttonEnabled && playing)
+				isTracking = false;
 		}
 
 		public void SetRecording(bool recording)

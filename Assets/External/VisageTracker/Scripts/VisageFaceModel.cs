@@ -33,13 +33,16 @@ namespace Visage.FaceTracking
 			
 			tracker.AddListenerToPlayButton(OnPlayingButtonClick);
 			tracker.AddListenerToRecordingButton(OnRecordingButtonClick);
+			tracker.AddListenerToSendRecordingButton(OnSendRecordingButtonClick);
 
 			string headRendererName = "Head";
 			SkinnedMeshRenderer headRenderer;
 			if (skinnedMeshRenderes.ContainsKey(headRendererName))
 			{
 				headRenderer = skinnedMeshRenderes[headRendererName];
-				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer);
+				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer, tracker.messageSendText);
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, "c964f7bee92fee6d57325b3696725099.dat"));
+				tracker.SetPlaying(false);
 			}
 		}
 
@@ -54,7 +57,7 @@ namespace Visage.FaceTracking
 				tracker.SetPlaying(true);
 				blendshapeRecorder.StartReplay();
 			}
-			Debug.Log("isPlaying=" + tracker.IsPlaying + " blendshapeRecorder.RecordedFramesCount =" + blendshapeRecorder.RecordedFramesCount);
+			Debug.Log("isPlaying=" + tracker.IsPlaying + " blendshapeRecorder.RecordedFramesCount =" + blendshapeRecorder.RecordedFramesCount + " tracker.IsTracking=" + tracker.IsTracking);
 			frameIndex = 0;
 		}
 
@@ -77,6 +80,11 @@ namespace Visage.FaceTracking
 			}
 			frameIndex = 0;
 			Debug.Log("isRecording=" + tracker.IsRecording);
+		}
+
+		private void OnSendRecordingButtonClick()
+		{
+			blendshapeRecorder.SendRecording(this);
 		}
 
 		private void Update()
@@ -122,7 +130,7 @@ namespace Visage.FaceTracking
 			actionUnitBindings.Clear();
 
 			this.tracker = tracker;
-			skinnedMeshRendererHasBSNamePrefix = false;
+			skinnedMeshRendererHasBSNamePrefix = true;
 			skinnedMeshRenderes.Clear();
 			SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
 			foreach (var renderer in renderers)
@@ -161,10 +169,7 @@ namespace Visage.FaceTracking
 
 				string blendshapeObjectName = blendShapeParts[0];
 				string blendshapeName = blendShapeParts[1];
-				if (skinnedMeshRendererHasBSNamePrefix)
-				{
-					blendshapeName = string.Concat("BS", blendshapeObjectName, ".", blendshapeName);
-				}
+				string blendshapeNameWithPrefix = string.Concat(blendshapeObjectName, "_blendShape.", blendshapeName);
 				//int blendshapeIndex = 0;
 				//if (!int.TryParse(blendShapeParts[1], out blendshapeIndex))
 				//{
@@ -236,12 +241,13 @@ namespace Visage.FaceTracking
 
 				if (skinnedMeshRenderes.ContainsKey(blendshapeObjectName))
 				{
+					Debug.Log("blendshapeNameWithPrefix=" + blendshapeNameWithPrefix);
 					SkinnedMeshRenderer renderer = skinnedMeshRenderes[blendshapeObjectName];   //GameObject.Find(blendshapeObjectName).GetComponent<SkinnedMeshRenderer>();
-					int blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
+					int blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeNameWithPrefix);
 					if (blendshapeIndex < 0)
 					{
-						blendshapeName = String.Concat(blendshapeName, " ");
-						blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeName);
+						blendshapeNameWithPrefix = String.Concat(blendshapeNameWithPrefix, " ");
+						blendshapeIndex = renderer.sharedMesh.GetBlendShapeIndex(blendshapeNameWithPrefix);
 					}
 					if (blendshapeIndex >= 0)
 					{

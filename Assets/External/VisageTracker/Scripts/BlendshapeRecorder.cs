@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
+using PictoryGramAPI.Data;
+using PictoryGramAPI;
+using UnityEngine.UI;
 
 namespace Visage.FaceTracking
 {
@@ -24,20 +27,30 @@ namespace Visage.FaceTracking
 
 		private int frameIndex;
 
+		private byte[] blendshapesByteBuffer;
+
+		private Text messageSendText;
+
 		public int RecordedFramesCount { get { return recordedFramesCount; } }
+
+		private bool isSendingRecording;
+
+		private MonoBehaviour messageSendingContext;
 
 		public BlendshapeRecorder()
 		{
-			
+
 		}
 
-		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings, SkinnedMeshRenderer customRenderer)
+		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings, SkinnedMeshRenderer customRenderer, Text messageSentText)
 		{
 			headRenderer = customRenderer;
 
+			isSendingRecording = false;
+
 			recordedFramesCount = 0;
 			frameIndex = 0;
-			
+
 			blendshapeWeights = new Dictionary<string, byte>();
 			recordedBlendshapes = new Dictionary<string, byte[]>();
 			blendshapeNameByteArrays = new Dictionary<string, byte[]>();
@@ -54,6 +67,8 @@ namespace Visage.FaceTracking
 					recordedBlendshapes.Add(blendshapeName, new byte[singleBlendshapeCapacity]);
 				}
 			}
+
+			this.messageSendText = messageSentText;
 		}
 
 		public void StartRecording()
@@ -81,9 +96,10 @@ namespace Visage.FaceTracking
 
 		public bool LoadBlendsapeWeights()
 		{
+			//Debug.Log("LoadBlendsapeWeights: " + frameIndex + " " + recordedFramesCount);
 			if (frameIndex < recordedFramesCount)
 			{
-				//Debug.Log(" " + frameIndex);
+
 				foreach (var recordedBlenshape in recordedBlendshapes)
 				{
 					byte[] recordedBlendshapeFrames = recordedBlenshape.Value;
@@ -124,7 +140,7 @@ namespace Visage.FaceTracking
 			{
 				bytesCounter += (4 + blendshapeNameByteArrays[recording.Key].Length + singleBlendshapeCapacity);
 			}
-			byte[] blendshapesByteBuffer = new byte[bytesCounter];
+			blendshapesByteBuffer = new byte[bytesCounter];
 
 
 			Debug.Log("SaveBlendshapesRecording: " + blendshapesCount + " " + singleBlendshapeCapacity + " " + recordedFramesCount);
@@ -162,7 +178,7 @@ namespace Visage.FaceTracking
 			blendshapeWeights = new Dictionary<string, byte>();
 			recordedBlendshapes = new Dictionary<string, byte[]>();
 
-			byte[] blendshapesByteBuffer = File.ReadAllBytes(filepath);
+			blendshapesByteBuffer = File.ReadAllBytes(filepath);
 
 			blendshapeWeights = new Dictionary<string, byte>();
 			int offset = 0;
@@ -186,7 +202,50 @@ namespace Visage.FaceTracking
 				blendshapeWeights.Add(blendshapeName, 0);
 				offset += singleBlendshapeCapacity;
 			}
-			blendshapesByteBuffer = null;
+		}
+
+
+		public void SendRecording(MonoBehaviour context)
+		{
+			this.messageSendingContext = context;
+			if (!isSendingRecording && blendshapesByteBuffer != null && blendshapesByteBuffer.Length > 0)
+			{
+				if (messageSendText != null)
+				{
+					messageSendText.gameObject.SetActive(true);
+					messageSendText.text = "Sending...";
+				}
+				Debug.Log("SendRecording");
+				isSendingRecording = true;
+				BlendshapesRecordingMessage message = new BlendshapesRecordingMessage();
+				message.Recording = new PictoryGramAPIFile(blendshapesByteBuffer);
+				string userId = "b9af29e28b5c1203d447adce0c4bbaef";
+				string auth = "b9af29e28b5c1203d447adce0c4bbaef6e748db181cb90b367721ca75da34806f1de7ae646754c9f80f09fcf69104bed0857d397defecb00914157c0a4edfa41";
+				context.StartCoroutine(PictoryGramAPIFileUpload.SendFileRoutine(context, message, userId, auth, null, null, OnSendRecordingError, OnSendRecordingSuccess));
+			}
+		}
+
+		private void OnSendRecordingError(string message)
+		{
+			if (messageSendingContext != null && messageSendText != null)
+			{
+				messageSendText.text = "Sending failed\n" + message;
+				messageSendingContext.StartCoroutineActionAfterTime(() => {
+					messageSendText.gameObject.SetActive(false);
+				}, 4f);
+			}
+			isSendingRecording = false;
+			Debug.Log("OnSendRecordingError " + message);
+		}
+		private void OnSendRecordingSuccess(Response<PictoryGramAPIObject> response)
+		{
+			isSendingRecording = false;
+			messageSendText.text = "Recording sent!";
+			messageSendingContext.StartCoroutineActionAfterTime(() => {
+				messageSendText.gameObject.SetActive(false);
+			}, 4f);
+			Debug.Log("OnSendRecordingSuccess " + response.Data.Status);
+
 		}
 	}
 }

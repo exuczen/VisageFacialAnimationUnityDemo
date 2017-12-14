@@ -46,7 +46,7 @@ namespace Visage.FaceTracking
 			{
 				if (target.BlendshapeIndex >= 0 && blendshapeWeights.ContainsKey(target.BlendshapeName))
 				{
-					target.Renderer.SetBlendShapeWeight(target.BlendshapeIndex, blendshapeWeights[target.BlendshapeName]);
+					target.Renderer.SetBlendShapeWeight(target.BlendshapeName, blendshapeWeights[target.BlendshapeName]);
 				}
 			}
 		}
@@ -84,7 +84,7 @@ namespace Visage.FaceTracking
 					if (target.BlendshapeIndex >= 0 && target.Weight >= 0f)
 					{
 						float value = FilteredValue * Weight * target.Weight * 100f;
-						target.Renderer.SetBlendShapeWeight(target.BlendshapeIndex, value);
+						target.Renderer.SetBlendShapeWeight(target.BlendshapeName, value);
 						if (blendshapeWeights.ContainsKey(target.BlendshapeName))
 						{
 							blendshapeWeights[target.BlendshapeName] = (byte)value;
