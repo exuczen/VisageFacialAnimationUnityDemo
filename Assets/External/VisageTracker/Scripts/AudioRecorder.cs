@@ -197,7 +197,7 @@ namespace Visage.FaceTracking
 
 			if (fileInfo.Exists)
 			{
-				WWW www = new WWW("file:///" + filepath);
+				WWW www = new WWW("file://" + filepath);
 				yield return new WaitUntil(() => www.isDone);
 				if (recordedClip != null)
 					AudioClip.Destroy(recordedClip);
