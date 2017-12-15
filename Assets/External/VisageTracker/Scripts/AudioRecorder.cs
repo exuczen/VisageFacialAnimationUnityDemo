@@ -41,7 +41,7 @@ namespace Visage.FaceTracking
 
 		public const float MAX_RECORDING_DURATION = 30f;
 
-		public const string recordedFileName = "recordedVoice.wav";
+		public const string RecordedFileName = "recordedVoice.wav";
 
 		public AudioClip RecordedClip { get { return recordedClip; } }
 
@@ -95,7 +95,7 @@ namespace Visage.FaceTracking
 					// Saving recoreded voice to wav - file needed to create video file
 					if (recordedClip != null && recordedClip.length > 0)
 					{
-						bool audioFileCreated = SavWav.Save(recordedFileName, recordedClip);
+						bool audioFileCreated = SavWav.Save(RecordedFileName, recordedClip);
 					}
 					if (recordedBuffer != null)
 						AudioClip.Destroy(recordedBuffer);
@@ -179,13 +179,17 @@ namespace Visage.FaceTracking
 		{
 			if (File.Exists(filepath))
 			{
-				//context.StartCoroutine(LoadRecordedClipRoutine(filepath));
 				byte[] audioBytes = File.ReadAllBytes(filepath);
 				recordedClip = AudioClipUtils.ToAudio(audioBytes);
 			}
 		}
 
-		private IEnumerator LoadRecordedClipRoutine(string filepath)
+		public void LoadWavClip(string filepath)
+		{
+			context.StartCoroutine(LoadWavClipRoutine(filepath));
+		}
+
+		private IEnumerator LoadWavClipRoutine(string filepath)
 		{
 			FileInfo fileInfo = new FileInfo(filepath);
 
@@ -195,8 +199,8 @@ namespace Visage.FaceTracking
 			{
 				WWW www = new WWW("file:///" + filepath);
 				yield return new WaitUntil(() => www.isDone);
-				yield return new WaitUntil(() => !isPlaying);
-				AudioClip.Destroy(recordedClip);
+				if (recordedClip != null)
+					AudioClip.Destroy(recordedClip);
 				recordedClip = WWWAudioExtensions.GetAudioClip(www);
 				Debug.Log("LoadRecordedClip: recorded clip: " + recordedClip);
 			}

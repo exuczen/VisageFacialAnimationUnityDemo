@@ -28,7 +28,7 @@ namespace Visage.FaceTracking
 
 		private AudioRecorder audioRecorder;
 
-		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, BlendshapeRecorder.recordedFileName); } }
+		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName); } }
 
 		private bool isSendingRecording;
 
@@ -49,12 +49,14 @@ namespace Visage.FaceTracking
 				headRenderer = skinnedMeshRenderes[headRendererName];
 
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer, tracker.messageSendText);
-				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, "34c9c037293bfbebd6f6b2240e1eefcf.dat"));
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
 				
 				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
-				audioRecorder.LoadRecordedClip(Path.Combine(Application.persistentDataPath, "2e005c718edd47fefb0a187fa29d5690.dat"));
+				audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
 
-				tracker.SetPlaying(false);
+				bool showSendRecordingButton = blendshapeRecorder.BlendshapesByteBuffer != null && blendshapeRecorder.BlendshapesByteBuffer.Length > 0;
+
+				tracker.SetPlaying(false, showSendRecordingButton);
 			}
 
 			isSendingRecording = false;

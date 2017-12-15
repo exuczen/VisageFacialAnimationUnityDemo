@@ -39,7 +39,7 @@ namespace Visage.FaceTracking
 
 		private MonoBehaviour messageSendingContext;
 
-		public const string recordedFileName = "recordedBlendshapes";
+		public const string RecordedFileName = "recordedBlendshapes.dat";
 
 		public BlendshapeRecorder()
 		{
