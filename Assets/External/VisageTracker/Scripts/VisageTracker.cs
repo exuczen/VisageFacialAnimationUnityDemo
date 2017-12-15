@@ -309,7 +309,6 @@ namespace Visage.FaceTracking
 			//trackButton.onClick.AddListener(OnTrackButtonClick);
 			switchCameraButton.onClick.AddListener(OnSwitchCameraButtonClick);
 			showMaskToggle.onValueChanged.AddListener(OnMaskToggleChange);
-			sendRecordingButton.gameObject.SetActive(false);
 			
 			if (initializeOnStart)
 			{

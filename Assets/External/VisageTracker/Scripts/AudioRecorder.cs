@@ -191,31 +191,33 @@ namespace Visage.FaceTracking
 
 		private IEnumerator LoadWavClipRoutine(string filepath)
 		{
-			FileInfo fileInfo = new FileInfo(filepath);
-
-			Debug.Log("LoadRecordedClip: fileCreated=" + fileInfo.Exists + " fileLength=" + fileInfo.Length);
-
-			if (fileInfo.Exists)
+			if (File.Exists(filepath))
 			{
-				WWW www = null;
-				try
+				FileInfo fileInfo = new FileInfo(filepath);
+
+				Debug.Log("LoadRecordedClip: fileCreated=" + fileInfo.Exists + " fileLength=" + fileInfo.Length);
+
+				if (fileInfo.Exists)
 				{
-					www = new WWW("file://" + filepath);
-				}
-				catch (Exception)
-				{
-					www = null;
-				}
-				if (www != null)
-				{
-					yield return new WaitUntil(() => www.isDone);
-					if (recordedClip != null)
-						AudioClip.Destroy(recordedClip);
-					recordedClip = WWWAudioExtensions.GetAudioClip(www);
-					Debug.Log("LoadRecordedClip: recorded clip: " + recordedClip);
+					WWW www = null;
+					try
+					{
+						www = new WWW("file://" + filepath);
+					}
+					catch (Exception)
+					{
+						www = null;
+					}
+					if (www != null)
+					{
+						yield return new WaitUntil(() => www.isDone);
+						if (recordedClip != null)
+							AudioClip.Destroy(recordedClip);
+						recordedClip = WWWAudioExtensions.GetAudioClip(www);
+						Debug.Log("LoadRecordedClip: recorded clip: " + recordedClip);
+					}
 				}
 			}
 		}
-
 	}
 }
