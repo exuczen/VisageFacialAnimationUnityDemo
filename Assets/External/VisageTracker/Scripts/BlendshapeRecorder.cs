@@ -21,7 +21,7 @@ namespace Visage.FaceTracking
 
 		private Dictionary<string, byte[]> blendshapeNameByteArrays;
 
-		private const int singleBlendshapeCapacity = 30 * 30 + 100;
+		private const int singleBlendshapeCapacity = 60 * 60;
 
 		private int recordedFramesCount;
 
