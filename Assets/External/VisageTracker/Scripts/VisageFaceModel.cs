@@ -85,7 +85,6 @@ namespace Visage.FaceTracking
 			if (tracker.IsPlaying)
 			{
 				tracker.SetPlaying(false);
-				blendshapeRecorder.StopReplay();
 				audioRecorder.PausePlayingClip();
 			}
 			else if (blendshapeRecorder.RecordedFramesCount > 0)
