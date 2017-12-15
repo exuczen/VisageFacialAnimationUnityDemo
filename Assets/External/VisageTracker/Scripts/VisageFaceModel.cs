@@ -105,7 +105,7 @@ namespace Visage.FaceTracking
 			if (tracker.IsRecording)
 			{
 				tracker.messageSendText.text = "Saving...";
-				tracker.gameObject.SetActive(true);
+				tracker.messageSendText.gameObject.SetActive(true);
 				tracker.SetRecording(false);
 				blendshapeRecorder.StopRecording();
 				this.StartCoroutineActionAfterFrames(() => {
