@@ -13,8 +13,6 @@ namespace Visage.FaceTracking
 {
 	public class BlendshapeRecorder
 	{
-		private SkinnedMeshRenderer headRenderer;
-
 		public Dictionary<string, byte> blendshapeWeights;
 
 		private Dictionary<string, byte[]> recordedBlendshapes;
@@ -35,10 +33,6 @@ namespace Visage.FaceTracking
 
 		public byte[] BlendshapesByteBuffer { get { return blendshapesByteBuffer; } }
 
-		private bool isSendingRecording;
-
-		private MonoBehaviour messageSendingContext;
-
 		public const string RecordedFileName = "recordedBlendshapes.dat";
 
 		public BlendshapeRecorder()
@@ -46,12 +40,8 @@ namespace Visage.FaceTracking
 
 		}
 
-		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings, SkinnedMeshRenderer customRenderer, Text messageSentText)
+		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings)
 		{
-			headRenderer = customRenderer;
-
-			isSendingRecording = false;
-
 			recordedFramesCount = 0;
 			frameIndex = 0;
 
@@ -71,8 +61,6 @@ namespace Visage.FaceTracking
 					recordedBlendshapes.Add(blendshapeName, new byte[singleBlendshapeCapacity]);
 				}
 			}
-
-			this.messageSendText = messageSentText;
 		}
 
 		public void StartRecording()
@@ -212,8 +200,6 @@ namespace Visage.FaceTracking
 				offset += singleBlendshapeCapacity;
 			}
 		}
-
-
 
 	}
 }

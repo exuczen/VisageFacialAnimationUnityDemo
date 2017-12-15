@@ -60,7 +60,7 @@ namespace Visage.FaceTracking
 			{
 				headRenderer = skinnedMeshRenderes[headRendererName];
 
-				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer, tracker.messageSendText);
+				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings);
 				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
 
 				//blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
