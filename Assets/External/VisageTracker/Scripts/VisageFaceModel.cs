@@ -63,13 +63,13 @@ namespace Visage.FaceTracking
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings);
 				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
 
-				//blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
-				//audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
+				audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
 
-				int recordingIndex = 0;
+				//int recordingIndex = 0;
 
-				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, recordings[recordingIndex,1]));
-				audioRecorder.LoadRecordedClip(Path.Combine(Application.persistentDataPath, recordings[recordingIndex, 0]));
+				//blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, recordings[recordingIndex,1]));
+				//audioRecorder.LoadRecordedClip(Path.Combine(Application.persistentDataPath, recordings[recordingIndex, 0]));
 
 
 				bool showSendRecordingButton = blendshapeRecorder.BlendshapesByteBuffer != null && blendshapeRecorder.BlendshapesByteBuffer.Length > 0;
@@ -104,11 +104,16 @@ namespace Visage.FaceTracking
 
 			if (tracker.IsRecording)
 			{
-				blendshapeRecorder.StopRecording();
-				audioRecorder.StopRecording();
-				blendshapeRecorder.SaveBlendshapesRecording(BlendshapeRecordingFilePath);
-				blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath);
+				tracker.messageSendText.text = "Saving...";
+				tracker.gameObject.SetActive(true);
 				tracker.SetRecording(false);
+				blendshapeRecorder.StopRecording();
+				this.StartCoroutineActionAfterFrames(() => {
+					audioRecorder.StopAndSaveRecording();
+					blendshapeRecorder.SaveBlendshapesRecording(BlendshapeRecordingFilePath);
+					blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath);
+					tracker.messageSendText.gameObject.SetActive(false);
+				}, 1);
 			}
 			else
 			{
@@ -137,12 +142,12 @@ namespace Visage.FaceTracking
 				{
 					binding.UpdateAction(blendshapeRecorder.blendshapeWeights);
 				}
-				if (tracker.IsRecording)
+			}
+			if (tracker.IsRecording)
+			{
+				if (!blendshapeRecorder.SaveBlendshapeWeights() || !tracker.IsTracking)
 				{
-					if (!blendshapeRecorder.SaveBlendshapeWeights())
-					{
-						OnRecordingButtonClick();
-					}
+					OnRecordingButtonClick();
 				}
 			}
 			else if (tracker.IsPlaying)

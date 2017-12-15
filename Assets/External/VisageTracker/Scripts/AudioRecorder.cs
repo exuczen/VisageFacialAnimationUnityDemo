@@ -89,7 +89,7 @@ namespace Visage.FaceTracking
 		/// <summary>
 		/// Stops recording the message, destroys previous recorded clip if exists and replaces it with new one.
 		/// </summary>
-		public void StopRecording()
+		public void StopAndSaveRecording()
 		{
 			if (isRecording)
 			{
