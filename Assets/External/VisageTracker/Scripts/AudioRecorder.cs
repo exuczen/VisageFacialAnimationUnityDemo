@@ -69,6 +69,16 @@ namespace Visage.FaceTracking
 		/// <summary>
 		/// Stops playing audio clip and salsa animation.
 		/// </summary>
+		public void StopPlayingClip()
+		{
+			isPlaying = false;
+			if (audioSource.isPlaying)
+				audioSource.Stop();
+		}
+
+		/// <summary>
+		/// Stops playing audio clip and salsa animation.
+		/// </summary>
 		public void PausePlayingClip()
 		{
 			isPlaying = false;
@@ -109,7 +119,7 @@ namespace Visage.FaceTracking
 		/// </summary>
 		public void StartRecording()
 		{
-			PausePlayingClip();
+			StopPlayingClip();
 
 			if (!isRecording && microphone != null)
 			{

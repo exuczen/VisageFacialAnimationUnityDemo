@@ -93,6 +93,11 @@ namespace Visage.FaceTracking
 			frameIndex = 0;
 		}
 
+		public void StopReplay()
+		{
+			frameIndex = 0;
+		}
+
 
 		public void StartReplay()
 		{

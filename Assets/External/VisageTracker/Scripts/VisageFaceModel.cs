@@ -85,6 +85,7 @@ namespace Visage.FaceTracking
 			if (tracker.IsPlaying)
 			{
 				tracker.SetPlaying(false);
+				blendshapeRecorder.StopReplay();
 				audioRecorder.PausePlayingClip();
 			}
 			else if (blendshapeRecorder.RecordedFramesCount > 0)
@@ -156,7 +157,11 @@ namespace Visage.FaceTracking
 				}
 				else
 				{
-					OnPlayingButtonClick();
+					tracker.SetPlaying(false);
+					blendshapeRecorder.StopReplay();
+					audioRecorder.StopPlayingClip();
+					frameIndex = 0;
+					Debug.Log("isPlaying=" + tracker.IsPlaying + " blendshapeRecorder.RecordedFramesCount =" + blendshapeRecorder.RecordedFramesCount + " tracker.IsTracking=" + tracker.IsTracking);
 				}
 			}
 
