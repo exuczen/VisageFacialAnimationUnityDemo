@@ -34,6 +34,18 @@ namespace Visage.FaceTracking
 
 		int frameIndex;
 
+
+		string[,] recordings = new string[,] {
+			{ "72c9326cfcca973c2e3cc130f32fe9a6.dat","a2c540413f896c63b04092e43d50dc64.dat" },
+			{ "88c4db0cfe499c8432d195419ced99c2.dat","8a12f42d5b032599bfbec38649c00044.dat" },
+			{ "8923e9962aff93285186ed875de06cbd.dat","9d7f17ee7658bb96f525e5f67c598aea.dat" },
+			{ "53fd8b982a033a994bc153ff03dacedf.dat","a1c3a223c31a605c63f043f82d9f2f78.dat" },
+			{ "4321a5d1854b59c4740894c62b1f1dc0.dat","fa9e7ca48cedf864461e5d17fbe0ece9.dat" },
+			{ "8286f071b051b04e450103f346b3a068.dat","1b817ac7bb953dc79b096120f2e81ed7.dat" },
+			{ "b9366ee8563ea447a5a15c9bfc34840f.dat","26a3cdc57cf67d21e3900117ba36c385.dat" },
+			{ "92e5d82d680c916c558b7873e0de08f3.dat","bfda175ebb14eb709273188667a11e8f.dat" },
+		};
+
 		private void Start()
 		{
 			SetupBinding(VisageTracker.Instance);
@@ -49,10 +61,16 @@ namespace Visage.FaceTracking
 				headRenderer = skinnedMeshRenderes[headRendererName];
 
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer, tracker.messageSendText);
-				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
-				
 				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
-				audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
+
+				//blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
+				//audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
+
+				int recordingIndex = 0;
+
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, recordings[recordingIndex,1]));
+				audioRecorder.LoadRecordedClip(Path.Combine(Application.persistentDataPath, recordings[recordingIndex, 0]));
+
 
 				bool showSendRecordingButton = blendshapeRecorder.BlendshapesByteBuffer != null && blendshapeRecorder.BlendshapesByteBuffer.Length > 0;
 
