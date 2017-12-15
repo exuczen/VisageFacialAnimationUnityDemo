@@ -401,6 +401,7 @@ namespace Visage.FaceTracking
 
 		private void OnEnable()
 		{
+			Initialize();
 			Debug.Log("<color=blue>VisageTracker.OnEnable</color>");
 
 			// clear all existing binding components
