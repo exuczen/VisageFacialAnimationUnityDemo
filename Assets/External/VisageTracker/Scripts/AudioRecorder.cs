@@ -197,12 +197,23 @@ namespace Visage.FaceTracking
 
 			if (fileInfo.Exists)
 			{
-				WWW www = new WWW("file://" + filepath);
-				yield return new WaitUntil(() => www.isDone);
-				if (recordedClip != null)
-					AudioClip.Destroy(recordedClip);
-				recordedClip = WWWAudioExtensions.GetAudioClip(www);
-				Debug.Log("LoadRecordedClip: recorded clip: " + recordedClip);
+				WWW www = null;
+				try
+				{
+					www = new WWW("file://" + filepath);
+				}
+				catch (Exception)
+				{
+					www = null;
+				}
+				if (www != null)
+				{
+					yield return new WaitUntil(() => www.isDone);
+					if (recordedClip != null)
+						AudioClip.Destroy(recordedClip);
+					recordedClip = WWWAudioExtensions.GetAudioClip(www);
+					Debug.Log("LoadRecordedClip: recorded clip: " + recordedClip);
+				}
 			}
 		}
 
