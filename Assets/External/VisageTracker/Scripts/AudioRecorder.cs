@@ -177,9 +177,12 @@ namespace Visage.FaceTracking
 
 		public void LoadRecordedClip(string filepath)
 		{
-			//context.StartCoroutine(LoadRecordedClipRoutine(filepath));
-			byte[] audioBytes = File.ReadAllBytes(filepath);
-			recordedClip = AudioClipUtils.ToAudio(audioBytes);
+			if (File.Exists(filepath))
+			{
+				//context.StartCoroutine(LoadRecordedClipRoutine(filepath));
+				byte[] audioBytes = File.ReadAllBytes(filepath);
+				recordedClip = AudioClipUtils.ToAudio(audioBytes);
+			}
 		}
 
 		private IEnumerator LoadRecordedClipRoutine(string filepath)
