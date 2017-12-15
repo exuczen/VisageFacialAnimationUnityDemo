@@ -1,9 +1,12 @@
-﻿using System;
+﻿using PictoryGramAPI;
+using PictoryGramAPI.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Visage.FaceTracking
 {
@@ -23,7 +26,11 @@ namespace Visage.FaceTracking
 
 		private BlendshapeRecorder blendshapeRecorder;
 
-		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, "blendshapeRecording"); } }
+		private AudioRecorder audioRecorder;
+
+		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, BlendshapeRecorder.recordedFileName); } }
+
+		private bool isSendingRecording;
 
 		int frameIndex;
 
@@ -40,10 +47,17 @@ namespace Visage.FaceTracking
 			if (skinnedMeshRenderes.ContainsKey(headRendererName))
 			{
 				headRenderer = skinnedMeshRenderes[headRendererName];
+
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings, headRenderer, tracker.messageSendText);
-				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, "c964f7bee92fee6d57325b3696725099.dat"));
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, "34c9c037293bfbebd6f6b2240e1eefcf.dat"));
+				
+				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
+				audioRecorder.LoadRecordedClip(Path.Combine(Application.persistentDataPath, "2e005c718edd47fefb0a187fa29d5690.dat"));
+
 				tracker.SetPlaying(false);
 			}
+
+			isSendingRecording = false;
 		}
 
 		private void OnPlayingButtonClick()
@@ -51,11 +65,13 @@ namespace Visage.FaceTracking
 			if (tracker.IsPlaying)
 			{
 				tracker.SetPlaying(false);
+				audioRecorder.StopPlayingClip();
 			}
 			else if (blendshapeRecorder.RecordedFramesCount > 0)
 			{
 				tracker.SetPlaying(true);
 				blendshapeRecorder.StartReplay();
+				audioRecorder.PlayClip();
 			}
 			Debug.Log("isPlaying=" + tracker.IsPlaying + " blendshapeRecorder.RecordedFramesCount =" + blendshapeRecorder.RecordedFramesCount + " tracker.IsTracking=" + tracker.IsTracking);
 			frameIndex = 0;
@@ -69,6 +85,7 @@ namespace Visage.FaceTracking
 			if (tracker.IsRecording)
 			{
 				blendshapeRecorder.StopRecording();
+				audioRecorder.StopRecording();
 				blendshapeRecorder.SaveBlendshapesRecording(BlendshapeRecordingFilePath);
 				blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath);
 				tracker.SetRecording(false);
@@ -76,6 +93,7 @@ namespace Visage.FaceTracking
 			else
 			{
 				blendshapeRecorder.StartRecording();
+				audioRecorder.StartRecording();
 				tracker.SetRecording(true);
 			}
 			frameIndex = 0;
@@ -84,7 +102,7 @@ namespace Visage.FaceTracking
 
 		private void OnSendRecordingButtonClick()
 		{
-			blendshapeRecorder.SendRecording(this);
+			SendRecording();
 		}
 
 		private void Update()
@@ -286,5 +304,56 @@ namespace Visage.FaceTracking
 			//Debug.Log("*"+ blendshapeName2+"*");
 		}
 
+		public void SendRecording()
+		{
+			Text messageSendText = tracker.messageSendText;
+			byte[] blendshapesByteBuffer = blendshapeRecorder.BlendshapesByteBuffer;
+			if (!isSendingRecording && blendshapesByteBuffer != null && blendshapesByteBuffer.Length > 0)
+			{
+				if (messageSendText != null)
+				{
+					messageSendText.gameObject.SetActive(true);
+					messageSendText.text = "Sending...";
+				}
+				Debug.Log("SendRecording blendshapesByteBuffer.length=" + blendshapesByteBuffer.Length);
+				isSendingRecording = true;
+				BlendshapesRecordingMessage message = new BlendshapesRecordingMessage();
+				message.BlendshapesRecording = new PictoryGramAPIFile(blendshapesByteBuffer);
+				if (audioRecorder.RecordedClip != null && audioRecorder.RecordedClip.length > 0)
+				{
+					message.Recording = new PictoryGramAPIFile() { Data = AudioClipUtils.ToBytes(audioRecorder.RecordedClip) };
+					message.RecordingIsCompressed = 0;
+					Debug.Log("SendRecording audioRecorder.RecordedClip.length=" + audioRecorder.RecordedClip.length);
+				}
+				string userId = "b9af29e28b5c1203d447adce0c4bbaef";
+				string auth = "b9af29e28b5c1203d447adce0c4bbaef6e748db181cb90b367721ca75da34806f1de7ae646754c9f80f09fcf69104bed0857d397defecb00914157c0a4edfa41";
+				this.StartCoroutine(PictoryGramAPIFileUpload.SendFileRoutine(this, message, userId, auth, null, null, OnSendRecordingError, OnSendRecordingSuccess));
+			}
+		}
+
+		private void OnSendRecordingError(string message)
+		{
+			Text messageSendText = tracker.messageSendText;
+			if (messageSendText != null)
+			{
+				messageSendText.text = "Sending failed\n" + message;
+				this.StartCoroutineActionAfterTime(() => {
+					messageSendText.gameObject.SetActive(false);
+				}, 4f);
+			}
+			isSendingRecording = false;
+			Debug.Log("OnSendRecordingError " + message);
+		}
+		private void OnSendRecordingSuccess(Response<PictoryGramAPIObject> response)
+		{
+			Text messageSendText = tracker.messageSendText;
+			isSendingRecording = false;
+			messageSendText.text = "Recording sent!";
+			this.StartCoroutineActionAfterTime(() => {
+				messageSendText.gameObject.SetActive(false);
+			}, 4f);
+			Debug.Log("OnSendRecordingSuccess " + response.Data.Status);
+
+		}
 	}
 }

@@ -33,9 +33,13 @@ namespace Visage.FaceTracking
 
 		public int RecordedFramesCount { get { return recordedFramesCount; } }
 
+		public byte[] BlendshapesByteBuffer { get { return blendshapesByteBuffer; } }
+
 		private bool isSendingRecording;
 
 		private MonoBehaviour messageSendingContext;
+
+		public const string recordedFileName = "recordedBlendshapes";
 
 		public BlendshapeRecorder()
 		{
@@ -205,47 +209,6 @@ namespace Visage.FaceTracking
 		}
 
 
-		public void SendRecording(MonoBehaviour context)
-		{
-			this.messageSendingContext = context;
-			if (!isSendingRecording && blendshapesByteBuffer != null && blendshapesByteBuffer.Length > 0)
-			{
-				if (messageSendText != null)
-				{
-					messageSendText.gameObject.SetActive(true);
-					messageSendText.text = "Sending...";
-				}
-				Debug.Log("SendRecording");
-				isSendingRecording = true;
-				BlendshapesRecordingMessage message = new BlendshapesRecordingMessage();
-				message.Recording = new PictoryGramAPIFile(blendshapesByteBuffer);
-				string userId = "b9af29e28b5c1203d447adce0c4bbaef";
-				string auth = "b9af29e28b5c1203d447adce0c4bbaef6e748db181cb90b367721ca75da34806f1de7ae646754c9f80f09fcf69104bed0857d397defecb00914157c0a4edfa41";
-				context.StartCoroutine(PictoryGramAPIFileUpload.SendFileRoutine(context, message, userId, auth, null, null, OnSendRecordingError, OnSendRecordingSuccess));
-			}
-		}
 
-		private void OnSendRecordingError(string message)
-		{
-			if (messageSendingContext != null && messageSendText != null)
-			{
-				messageSendText.text = "Sending failed\n" + message;
-				messageSendingContext.StartCoroutineActionAfterTime(() => {
-					messageSendText.gameObject.SetActive(false);
-				}, 4f);
-			}
-			isSendingRecording = false;
-			Debug.Log("OnSendRecordingError " + message);
-		}
-		private void OnSendRecordingSuccess(Response<PictoryGramAPIObject> response)
-		{
-			isSendingRecording = false;
-			messageSendText.text = "Recording sent!";
-			messageSendingContext.StartCoroutineActionAfterTime(() => {
-				messageSendText.gameObject.SetActive(false);
-			}, 4f);
-			Debug.Log("OnSendRecordingSuccess " + response.Data.Status);
-
-		}
 	}
 }

@@ -12,6 +12,8 @@ namespace PictoryGramAPI.Data {
     /// </summary>
     public class BlendshapesRecordingMessage : Message
     {
-
-    }
+		[Ignore] // SimpleSQL
+		[JsonProperty("blendshapesRecording")]
+		public PictoryGramAPIFile BlendshapesRecording { get; set; } // This variable is only ofr file upload. Should never be stored.
+	}
 }
