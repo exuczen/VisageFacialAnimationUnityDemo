@@ -35,14 +35,16 @@ namespace Visage.FaceTracking
 
 		public const string RecordedFileName = "recordedBlendshapes4.dat";
 
+		private const float fixedDeltaTime = 0.02f;
+
 		public BlendshapeRecorder()
 		{
-
 		}
 
-		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings)
+		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings) : this()
 		{
-			Debug.Log("Time.fixedDeltaTime=" + Time.fixedDeltaTime + " " + Time.fixedUnscaledDeltaTime);
+			Debug.Log("BlendshapeRecorder: Time.fixedDeltaTime=" + Time.fixedDeltaTime + " -> " + fixedDeltaTime);
+			Time.fixedDeltaTime = fixedDeltaTime;
 			recordedFramesCount = 0;
 			frameIndex = 0;
 
@@ -94,7 +96,7 @@ namespace Visage.FaceTracking
 
 		public bool LoadBlendsapeWeights(float playbackTime)
 		{
-			int frameIndex = (int)(playbackTime / Time.fixedDeltaTime);
+			int frameIndex = (int)(playbackTime / fixedDeltaTime);
 			return LoadBlendsapeWeights(frameIndex);
 		}
 
@@ -178,7 +180,7 @@ namespace Visage.FaceTracking
 		{
 			if (fromResources)
 			{
-				TextAsset asset = Resources.Load("recordedBlendshapes4.dat") as TextAsset;
+				TextAsset asset = Resources.Load(Path.GetFileNameWithoutExtension(filepath)) as TextAsset;
 				if (asset == null)
 					return;
 				//MemoryStream s = new MemoryStream(asset.bytes);
