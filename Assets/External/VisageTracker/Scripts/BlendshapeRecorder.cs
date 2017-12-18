@@ -19,7 +19,7 @@ namespace Visage.FaceTracking
 
 		private Dictionary<string, byte[]> blendshapeNameByteArrays;
 
-		private const int singleBlendshapeCapacity = 60 * 60;
+		private const int singleBlendshapeCapacity = 90 * 60;
 
 		private int recordedFramesCount;
 
@@ -33,7 +33,7 @@ namespace Visage.FaceTracking
 
 		public byte[] BlendshapesByteBuffer { get { return blendshapesByteBuffer; } }
 
-		public const string RecordedFileName = "recordedBlendshapes.dat";
+		public const string RecordedFileName = "recordedBlendshapes4.dat";
 
 		public BlendshapeRecorder()
 		{
@@ -42,6 +42,7 @@ namespace Visage.FaceTracking
 
 		public BlendshapeRecorder(List<ActionUnitBinding> actionUnitBindings)
 		{
+			Debug.Log("Time.fixedDeltaTime=" + Time.fixedDeltaTime + " " + Time.fixedUnscaledDeltaTime);
 			recordedFramesCount = 0;
 			frameIndex = 0;
 
@@ -167,15 +168,26 @@ namespace Visage.FaceTracking
 			File.WriteAllBytes(filepath, blendshapesByteBuffer);
 		}
 
-		public void LoadBlenshapesRecording(string filepath)
+		public void LoadBlenshapesRecording(string filepath, bool fromResources)
 		{
-			if (!File.Exists(filepath))
-				return;
-
+			if (fromResources)
+			{
+				TextAsset asset = Resources.Load("recordedBlendshapes4.dat") as TextAsset;
+				if (asset == null)
+					return;
+				//MemoryStream s = new MemoryStream(asset.bytes);
+				//BinaryReader br = new BinaryReader(s);
+				blendshapesByteBuffer = asset.bytes;
+			}
+			else
+			{
+				if (!File.Exists(filepath))
+					return;
+				blendshapesByteBuffer = File.ReadAllBytes(filepath);
+			}
+			
 			blendshapeWeights = new Dictionary<string, byte>();
 			recordedBlendshapes = new Dictionary<string, byte[]>();
-
-			blendshapesByteBuffer = File.ReadAllBytes(filepath);
 
 			blendshapeWeights = new Dictionary<string, byte>();
 			int offset = 0;

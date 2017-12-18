@@ -41,7 +41,7 @@ namespace Visage.FaceTracking
 
 		public const float MAX_RECORDING_DURATION = 30f;
 
-		public const string RecordedFileName = "recordedVoice.wav";
+		public const string RecordedFileName = "recordedVoice4.wav";
 
 		public AudioClip RecordedClip { get { return recordedClip; } }
 
@@ -194,9 +194,16 @@ namespace Visage.FaceTracking
 			}
 		}
 
-		public void LoadWavClip(string filepath)
+		public void LoadWavClip(string filepath, bool fromResources)
 		{
-			context.StartCoroutine(LoadWavClipRoutine(filepath));
+			if (fromResources)
+			{
+				recordedClip = Resources.Load<AudioClip>(Path.GetFileNameWithoutExtension(filepath));
+			}
+			else
+			{
+				context.StartCoroutine(LoadWavClipRoutine(filepath));
+			}
 		}
 
 		private IEnumerator LoadWavClipRoutine(string filepath)

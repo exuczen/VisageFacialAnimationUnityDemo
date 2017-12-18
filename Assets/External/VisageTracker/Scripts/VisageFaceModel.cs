@@ -63,8 +63,11 @@ namespace Visage.FaceTracking
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings);
 				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
 
-				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName));
-				audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName));
+				bool loadFromResources = true;
+
+				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName), loadFromResources);
+				audioRecorder.LoadWavClip(Path.Combine(Application.persistentDataPath, AudioRecorder.RecordedFileName), loadFromResources);
+				
 
 				//int recordingIndex = 0;
 
@@ -111,7 +114,7 @@ namespace Visage.FaceTracking
 				this.StartCoroutineActionAfterFrames(() => {
 					audioRecorder.StopAndSaveRecording();
 					blendshapeRecorder.SaveBlendshapesRecording(BlendshapeRecordingFilePath);
-					blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath);
+					blendshapeRecorder.LoadBlenshapesRecording(BlendshapeRecordingFilePath, false);
 					tracker.messageSendText.gameObject.SetActive(false);
 				}, 1);
 			}
