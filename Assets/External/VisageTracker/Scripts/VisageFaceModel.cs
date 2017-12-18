@@ -158,7 +158,7 @@ namespace Visage.FaceTracking
 			}
 			else if (tracker.IsPlaying)
 			{
-				if (blendshapeRecorder.LoadBlendsapeWeights(audioSource.time))
+				if (blendshapeRecorder.LoadBlendshapeWeights(audioSource.time))
 				{
 					foreach (var binding in actionUnitBindings)
 					{

@@ -27,8 +27,6 @@ namespace Visage.FaceTracking
 
 		private byte[] blendshapesByteBuffer;
 
-		private Text messageSendText;
-
 		public int RecordedFramesCount { get { return recordedFramesCount; } }
 
 		public byte[] BlendshapesByteBuffer { get { return blendshapesByteBuffer; } }
@@ -94,7 +92,7 @@ namespace Visage.FaceTracking
 		{
 		}
 
-		public bool LoadBlendsapeWeights(float playbackTime)
+		public bool LoadBlendshapeWeights(float playbackTime)
 		{
 			int frameIndex = (int)(playbackTime / fixedDeltaTime);
 			return LoadBlendsapeWeights(frameIndex);
