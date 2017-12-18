@@ -28,6 +28,8 @@ namespace Visage.FaceTracking
 
 		private AudioRecorder audioRecorder;
 
+		private AudioSource audioSource;
+
 		private string BlendshapeRecordingFilePath { get { return Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName); } }
 
 		private bool isSendingRecording;
@@ -61,8 +63,9 @@ namespace Visage.FaceTracking
 				headRenderer = skinnedMeshRenderes[headRendererName];
 
 				blendshapeRecorder = new BlendshapeRecorder(actionUnitBindings);
-				audioRecorder = new AudioRecorder(GetComponent<AudioSource>(), this);
-
+				audioSource = GetComponent<AudioSource>();
+				audioRecorder = new AudioRecorder(audioSource, this);
+				
 				bool loadFromResources = true;
 
 				blendshapeRecorder.LoadBlenshapesRecording(Path.Combine(Application.persistentDataPath, BlendshapeRecorder.RecordedFileName), loadFromResources);
@@ -155,7 +158,7 @@ namespace Visage.FaceTracking
 			}
 			else if (tracker.IsPlaying)
 			{
-				if (blendshapeRecorder.LoadBlendsapeWeights())
+				if (blendshapeRecorder.LoadBlendsapeWeights(audioSource.time))
 				{
 					foreach (var binding in actionUnitBindings)
 					{

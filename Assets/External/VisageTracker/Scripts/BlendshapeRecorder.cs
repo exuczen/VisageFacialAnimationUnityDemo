@@ -92,8 +92,15 @@ namespace Visage.FaceTracking
 		{
 		}
 
-		public bool LoadBlendsapeWeights()
+		public bool LoadBlendsapeWeights(float playbackTime)
 		{
+			int frameIndex = (int)(playbackTime / Time.fixedDeltaTime);
+			return LoadBlendsapeWeights(frameIndex);
+		}
+
+		public bool LoadBlendsapeWeights(int frameIndex)
+		{
+			this.frameIndex = frameIndex;
 			//Debug.Log("LoadBlendsapeWeights: " + frameIndex + " " + recordedFramesCount);
 			if (frameIndex < recordedFramesCount)
 			{
@@ -104,10 +111,9 @@ namespace Visage.FaceTracking
 					byte blenshapeValue = recordedBlendshapeFrames[frameIndex];
 					blendshapeWeights[recordedBlenshape.Key] = blenshapeValue;
 				}
-				frameIndex++;
 				return true;
 			}
-			frameIndex = 0;
+			this.frameIndex = 0;
 			return false;
 		}
 
