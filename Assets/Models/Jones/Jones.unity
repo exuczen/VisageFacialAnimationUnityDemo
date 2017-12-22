@@ -469,7 +469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1180565467
 RectTransform:
   m_ObjectHideFlags: 0
@@ -520,13 +520,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "You better watch out, you better not cry\r\nBetter not pout, I'm telling
-    you why\r\nSanta Claus is coming to town,\r\nHe's making a list and checking it
-    twice,\r\nGonna find out Who's naughty and nice\r\nSanta Claus is comming to town.\r\nHe
-    sees you when you're sleeping\r\nHe knows when you're awake,\r\nHe knows if you've
-    been bad or good,\r\nSo be good for goodness sake!\r Ooooooh\nYou better watch
-    out, you better not cry\r\nBetter not pout, I'm telling you why\r\nSanta Claus
-    is coming to town,\r\nSanta Claus is coming to town\n"
+  m_Text: "Hi everybody, \nwishing you a merry christmass \nand happy holidays\nMuaaaah"
 --- !u!222 &1180565469
 CanvasRenderer:
   m_ObjectHideFlags: 0

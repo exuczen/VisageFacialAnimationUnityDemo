@@ -31,7 +31,7 @@ namespace Visage.FaceTracking
 
 		public byte[] BlendshapesByteBuffer { get { return blendshapesByteBuffer; } }
 
-		public const string RecordedFileName = "recordedBlendshapes4.dat";
+		public const string RecordedFileName = "recordedBlendshapes5.dat";
 
 		private const float fixedDeltaTime = 0.02f;
 

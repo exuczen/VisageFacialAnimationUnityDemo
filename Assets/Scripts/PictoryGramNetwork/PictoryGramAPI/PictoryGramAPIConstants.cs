@@ -11,7 +11,7 @@ namespace PictoryGramAPI
 		#if UNITY_EDITOR
 		private const bool USE_DEVELOP_SERVER = true;
 		#else
-		private const bool USE_DEVELOP_SERVER = true;
+		private const bool USE_DEVELOP_SERVER = false;
 		#endif
 		private const string DEVELOP_SERVER_URL = "http://pictorygramDev.pixzell.pl/json/";
 		/// <summary>

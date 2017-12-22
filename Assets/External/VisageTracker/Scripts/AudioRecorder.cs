@@ -41,7 +41,7 @@ namespace Visage.FaceTracking
 
 		public const float MAX_RECORDING_DURATION = 30f;
 
-		public const string RecordedFileName = "recordedVoice4.wav";
+		public const string RecordedFileName = "recordedVoice5.mp3";
 
 		public AudioClip RecordedClip { get { return recordedClip; } }
 
